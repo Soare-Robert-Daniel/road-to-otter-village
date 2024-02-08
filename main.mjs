@@ -230,6 +230,7 @@ const diffHour = (hour) => {
   }
 
   return {
+    hour,
     remainingTime,
     isNextDay: diff < 0,
   };
@@ -261,44 +262,65 @@ const HoursTable = () => {
         const hours = Array.from({ length: maxLength }, (_, i) => [
           turHours[i],
           returHours[i],
-        ]);
+        ]).map(([tur, retur]) => {
+          return [tur ? diffHour(tur) : null, retur ? diffHour(retur) : null];
+        });
+
+        if (
+          hours.every(
+            ([tur, retur]) =>
+              (!tur || tur?.isNextDay) &&
+              (!retur || retur?.isNextDay) &&
+              !displayNextDay.val
+          )
+        ) {
+          return tr(
+            td(
+              { colSpan: "4", style: "text-align: center; padding-top: 30px;" },
+              "Niciun autobuz disponibil. Sfărșit de program."
+            )
+          );
+        }
 
         return tbody(
-          hours.map((hourPair) => {
+          hours.map((turReturPair) => {
             const row = tr();
 
-            if (hourPair[0]) {
-              const timeTur = diffHour(hourPair[0]);
+            const bothExpired =
+              (!turReturPair[0] || turReturPair?.[0]?.isNextDay) &&
+              (!turReturPair[1] || turReturPair?.[1]?.isNextDay) &&
+              !displayNextDay.val;
 
-              if (timeTur.isNextDay && !displayNextDay.val) {
-                return "";
-              }
+            if (bothExpired && !displayNextDay.val) {
+              return "";
+            }
 
+            if (
+              turReturPair[0] &&
+              (!turReturPair?.[0]?.isNextDay || displayNextDay.val)
+            ) {
               van.add(
                 row,
-                td(hourPair[0]),
+                td(turReturPair[0].hour),
                 td(
-                  { className: timeTur.isNextDay ? "next-day" : "" },
-                  timeTur.remainingTime
+                  { className: turReturPair[0]?.isNextDay ? "next-day" : "" },
+                  turReturPair[0].remainingTime
                 )
               );
             } else {
               van.add(row, td(), td());
             }
 
-            if (hourPair[1]) {
-              const timeRetur = diffHour(hourPair[1]);
-
-              if (timeRetur.isNextDay && !displayNextDay.val) {
-                return "";
-              }
-
+            if (
+              turReturPair[1] &&
+              (!turReturPair?.[1]?.isNextDay || displayNextDay.val)
+            ) {
               van.add(
                 row,
-                td(hourPair[1]),
+                td(turReturPair[1].hour),
                 td(
-                  { className: timeRetur.isNextDay ? "next-day" : "" },
-                  timeRetur.remainingTime
+                  { className: turReturPair[1]?.isNextDay ? "next-day" : "" },
+                  turReturPair[1].remainingTime
                 )
               );
             } else {
