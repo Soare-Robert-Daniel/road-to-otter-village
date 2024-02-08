@@ -1,0 +1,16 @@
+{
+    "short_name": "Vidra",
+    "name": "Drumul Spre Vidra",
+    "icons": [
+      {
+        "src": "assets/logo.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#facd60",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#e74645"
+  }
