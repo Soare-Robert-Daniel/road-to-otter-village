@@ -146,19 +146,19 @@ const displayNextDay = van.state(false);
 const todayDate = van.state(new Date());
 const showHolidayProgram = van.state(isHolidayProgram(todayDate.val));
 
-// setInterval(() => {
-//   const currentDate = new Date();
+setInterval(() => {
+  const currentDate = new Date();
 
-//   // Check if the hour and minute are the same
-//   if (
-//     currentDate.getHours() === todayDate.val.getHours() &&
-//     currentDate.getMinutes() === todayDate.val.getMinutes()
-//   ) {
-//     return;
-//   }
+  // Check if the hour and minute are the same
+  if (
+    currentDate.getHours() === todayDate.val.getHours() &&
+    currentDate.getMinutes() === todayDate.val.getMinutes()
+  ) {
+    return;
+  }
 
-//   todayDate.val = new Date();
-// }, 450);
+  todayDate.val = new Date();
+}, 450);
 
 // +------------- Components -------------+
 
