@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drumul Spre Vidra</title>
+  <meta charset="UTF-16">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+
+    :root {
+      --primary-color: #e74645;
+      --secondary-color: #facd60;
+      --tertiary-color: #f9bf39;
+      --hours-font-size: 22px;
+      --header-font-size: 15px;
+    }
+
+    body {
+      background-color: var(--secondary-color);
+      margin: 0px;
+      padding: 0px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    #app {
+      max-width: 500px;
+    }
+
+    @media (min-width: 500px) {
+      #app {
+        margin: 0 auto;
+      }
+    }
+
+    .settings {
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 10px 5px;
+      background-color: var(--primary-color);
+    }
+
+    .settings label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      line-height: 0;
+      font-weight: bold;
+    }
+
+    .settings select {
+        padding: 5px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .settings input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        padding: 0px;
+    }
+
+    .hours-table {
+      display: flex;
+      justify-content: space-between;
+      margin: 0px 5px
+    }
+
+    .hours-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .hours-table th {
+        text-align: center;
+        font-size: var(--header-font-size);
+    }
+
+    .hours-table .next-day {
+        color: #fc0000;
+    }
+
+    .hours-table :is( th, td ) {
+        padding: 5px;
+    }
+
+    .hours-table span {
+        padding: 5px;
+        margin-left: 5px;
+        background-color: #ddd;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .hours-table tbody tr {
+      text-align: right;
+      font-size: var(--hours-font-size);
+    } 
+
+    /* Alternate row color */
+    .hours-table tbody tr:nth-child(odd) {
+        background-color: var(--tertiary-color);
+        border-radius: 10px;
+    }
+
+    .program-select {
+      max-width: 150px;
+    }
+
+    </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="./main.mjs" type="module" async></script>
+</body>
+<footer>
+   
+</footer>
+</html>
