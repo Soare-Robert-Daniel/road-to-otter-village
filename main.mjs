@@ -1,21 +1,6 @@
 import van from "./van-1.2.8.min.js";
 
-const {
-  thead,
-  th,
-  table,
-  div,
-  option,
-  select,
-  tbody,
-  tr,
-  td,
-  input,
-  label,
-  p,
-  span,
-  sub,
-} = van.tags;
+const { div, option, select, input, label, p, sub } = van.tags;
 
 const romanianNationalHolidays = [
   "01-01", // Anul Nou
@@ -187,7 +172,7 @@ const Settings = () => {
           onchange: (e) => (busOption = e.target.value),
           value: busOption.val,
         },
-        option({ value: "420" }, "Linia 420")
+        option({ value: "420" }, "Linia🌿420")
         // option({ value: "438" }, "438")
       )
     ),
