@@ -251,7 +251,6 @@ const diffHour = (hour) => {
 };
 
 const HoursDisplay = ({ computedHours }) => {
-  console.log(computedHours);
   return div(
     {
       className: "hours-display-container",
@@ -311,6 +310,20 @@ const HoursSectionDisplay = () => {
   )
     .map(diffHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
+
+  if (turComputedHours.length === 0 && returComputedHours.length === 0) {
+    return div(
+      {
+        className: "hours-display-section",
+      },
+      p(
+        {
+          className: "no-hours",
+        },
+        "Numai sunt curse disponibile pentru ziua de azi."
+      )
+    );
+  }
 
   return div(
     {
