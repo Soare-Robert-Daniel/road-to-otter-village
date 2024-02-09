@@ -29,8 +29,8 @@
       --primary-color: #e74645;
       --secondary-color: #facd60;
       --tertiary-color: #f9bf39;
-      --hours-font-size: 22px;
-      --header-font-size: 15px;
+      --hours-font-size: 24px;
+      --header-font-size: 18px;
     }
 
     body {
@@ -42,6 +42,8 @@
 
     #app {
       max-width: 500px;
+      display: flex;
+      flex-direction: column;
     }
 
     @media (min-width: 500px) {
@@ -56,6 +58,8 @@
       align-items: center;
       padding: 10px 5px;
       background-color: var(--primary-color);
+
+      border-radius: 0px 0px 5px 5px;
     }
 
     .settings label {
@@ -79,64 +83,112 @@
         padding: 0px;
     }
 
-    .hours-table {
-      justify-content: space-between;
-      margin: 0px 5px
-    }
-
-    .hours-table table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    table tr :is(td, th:not([colspan="2"])):nth-child(2) {
-      border-right: 2px solid #000;
-    }
-
-    .hours-table thead tr:nth-child(2) th {
-        text-align: right;
-    }
-
-    .hours-table th {
-        text-align: center;
-        font-size: var(--header-font-size);
-    }
-
-    .hours-table .next-day {
+    .next-day {
         color: #fc0000;
-    }
-
-    .hours-table :is( th, td ) {
-        padding: 5px;
-    }
-
-    .hours-table span {
-        padding: 5px;
-        margin-left: 5px;
-        background-color: #ddd;
-        border-radius: 10px;
-        font-size: 14px;
-    }
-
-    .hours-table tbody tr {
-      text-align: right;
-      font-size: var(--hours-font-size);
-    } 
-
-    /* Alternate row color */
-    .hours-table tbody tr:nth-child(odd) {
-        background-color: var(--tertiary-color);
-        border-radius: 10px;
     }
 
     .program-select {
       max-width: 150px;
     }
 
+    .hours-display-section {
+      display: flex;
+      flex-direction: row;
+      padding: 4px;
+
+      width: 100%;
+    }
+
+    .hours-display-container {
+      display: flex;
+      flex-direction: column;
+
+      align-items: center;
+
+      gap: 10px;
+    }
+
+    .hours-display-column {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .hours-display-column:first-child {
+      border-right: 1px solid #000;
+    }
+
+    .hours-display-column:last-child {
+      border-left: 1px solid #000;
+    }
+
+    .hours-display-header {
+      text-align: center;
+      font-size: var(--header-font-size);
+    }
+
+    .hours-display-header p {
+      margin: 0px 5px;
+      margin-bottom: 10px;
+    }
+
+    .hour {
+      display: flex;
+      flex-direction: row;
+
+      border-radius: 5px;
+    }
+
+    .hour-time {
+      font-size: var(--hours-font-size);
+      margin: 0;
+    }
+
+    .hour-remaning-time {
+      font-size: calc(var(--hours-font-size) / 1.5);
+    }
+
+    .instructions {
+      margin: 20px auto;
+      max-width: 500px;
+
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .instructions details {
+      padding: 10px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    .instructions a {
+      color: var(--tertiary-color);
+      text-decoration: underline;
+    }
     </style>
 </head>
 <body>
   <div id="app"></div>
+
+  <div class="instructions">
+    <details>
+      <summary>Instrucțiuni</summary>
+      <p> Fiecare coloană reprezintă un sens de mers. Prima coloană este pentru mersul spre București (Tur), iar a doua coloană este pentru mersul spre Vidra (Retur). </p>
+      <p> Ora afișată este cea de plecare din capătul de linie al direcției respective. </p>
+      <p> Fiecare linie reprezintă ora de plecare din capătul de linie al direcției respective. </p>
+      <p> Fiecare oră de plecare este însoțită de timpul rămas până la plecare. Timpul rămas este calculat în funcție de ora curentă a dispozitivului tău. </p>
+      <p> Dacă opțiunea <b>Complet</b> este activată, va fi afișat tot programul, iar timpul rămas pentru orele trecute va fi calculat în raport cu următoare zi.</p>
+    </details>
+    <details>
+      <summary>Alte resurse</summary>
+      <p>Program oficial: <a href="https://www.stbsa.ro/program_linie?420">Program Linie 420</a></p>
+      <p>Hartă interactivă: <a href="https://info.stbsa.ro/traseu/843">info.stbsa.ro</a></p>
+    </details>
+  </div>
+
   <script src="./main.mjs" type="module" async></script>
 </body>
 <footer>

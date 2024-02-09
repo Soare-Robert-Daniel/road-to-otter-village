@@ -1,7 +1,21 @@
 import van from "./van-1.2.8.min.js";
 
-const { thead, th, table, div, option, select, tbody, tr, td, input, label } =
-  van.tags;
+const {
+  thead,
+  th,
+  table,
+  div,
+  option,
+  select,
+  tbody,
+  tr,
+  td,
+  input,
+  label,
+  p,
+  span,
+  sub,
+} = van.tags;
 
 const romanianNationalHolidays = [
   "01-01", // Anul Nou
@@ -236,107 +250,83 @@ const diffHour = (hour) => {
   };
 };
 
-const HoursTable = () => {
+const HoursDisplay = ({ computedHours }) => {
+  console.log(computedHours);
   return div(
     {
-      className: "hours-table",
+      className: "hours-display-container",
     },
-    table(
-      thead(
-        tr(
-          th({ colSpan: "2" }, "Tur (Spre București)"),
-          th({ colSpan: "2" }, "Retur (Spre Vidra)")
-        ),
-        tr(th("Oră"), th("Timp Rămas"), th("Oră"), th("Timp Rămas"))
-      ),
-      () => {
-        // Create two column (hour, remaning time) for each tur and retur
-        const turHours = showHolidayProgram.val
-          ? data.bus[busOption.val].tur.holidayHours
-          : data.bus[busOption.val].tur.workingHours;
-        const returHours = showHolidayProgram.val
-          ? data.bus[busOption.val].retur.holidayHours
-          : data.bus[busOption.val].retur.workingHours;
-
-        const maxLength = Math.max(turHours.length, returHours.length);
-        const hours = Array.from({ length: maxLength }, (_, i) => [
-          turHours[i],
-          returHours[i],
-        ]).map(([tur, retur]) => {
-          return [tur ? diffHour(tur) : null, retur ? diffHour(retur) : null];
-        });
-
-        if (
-          hours.every(
-            ([tur, retur]) =>
-              (!tur || tur?.isNextDay) &&
-              (!retur || retur?.isNextDay) &&
-              !displayNextDay.val
+    computedHours.map((computedHour) => {
+      return div(
+        {
+          className: "hour",
+        },
+        p(
+          {
+            className: "hour-time",
+          },
+          computedHour.hour,
+          sub(
+            {
+              className:
+                "hour-remaning-time " +
+                (computedHour?.isNextDay ? "next-day" : ""),
+            },
+            ` (${computedHour?.remainingTime})`
           )
-        ) {
-          return tr(
-            td(
-              { colSpan: "4", style: "text-align: center; padding-top: 30px;" },
-              "Niciun autobuz disponibil. Sfărșit de program."
-            )
-          );
-        }
-
-        return tbody(
-          hours.map((turReturPair) => {
-            const row = tr();
-
-            const bothExpired =
-              (!turReturPair[0] || turReturPair?.[0]?.isNextDay) &&
-              (!turReturPair[1] || turReturPair?.[1]?.isNextDay) &&
-              !displayNextDay.val;
-
-            if (bothExpired && !displayNextDay.val) {
-              return "";
-            }
-
-            if (
-              turReturPair[0] &&
-              (!turReturPair?.[0]?.isNextDay || displayNextDay.val)
-            ) {
-              van.add(
-                row,
-                td(turReturPair[0].hour),
-                td(
-                  { className: turReturPair[0]?.isNextDay ? "next-day" : "" },
-                  turReturPair[0].remainingTime
-                )
-              );
-            } else {
-              van.add(row, td(), td());
-            }
-
-            if (
-              turReturPair[1] &&
-              (!turReturPair?.[1]?.isNextDay || displayNextDay.val)
-            ) {
-              van.add(
-                row,
-                td(turReturPair[1].hour),
-                td(
-                  { className: turReturPair[1]?.isNextDay ? "next-day" : "" },
-                  turReturPair[1].remainingTime
-                )
-              );
-            } else {
-              van.add(row, td(), td());
-            }
-
-            return row;
-          })
-        );
-      }
-    )
+        )
+      );
+    })
   );
 };
 
-const App = () => {
-  return div(Settings(), HoursTable());
+const HoursColumnDisplay = ({ title, computedHours }) => {
+  return div(
+    {
+      className: "hours-display-column",
+    },
+    div(
+      {
+        className: "hours-display-header",
+      },
+      p(title)
+    ),
+    HoursDisplay({ computedHours })
+  );
 };
 
-van.add(document.querySelector("#app"), App());
+const HoursSectionDisplay = () => {
+  const turComputedHours = (
+    showHolidayProgram.val
+      ? data.bus[busOption.val].tur.holidayHours
+      : data.bus[busOption.val].tur.workingHours
+  )
+    .map(diffHour)
+    .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
+
+  const returComputedHours = (
+    showHolidayProgram.val
+      ? data.bus[busOption.val].retur.holidayHours
+      : data.bus[busOption.val].retur.workingHours
+  )
+    .map(diffHour)
+    .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
+
+  return div(
+    {
+      className: "hours-display-section",
+    },
+    HoursColumnDisplay({
+      title: "Tur (Spre București)",
+      computedHours: turComputedHours,
+    }),
+    HoursColumnDisplay({
+      title: "Retur (Spre Vidra)",
+      computedHours: returComputedHours,
+    })
+  );
+};
+
+van.add(document.querySelector("#app"), Settings(), () =>
+  HoursSectionDisplay()
+);
