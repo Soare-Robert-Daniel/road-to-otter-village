@@ -141,7 +141,7 @@ const isHolidayProgram = (date) => {
 };
 
 const busOption = van.state("420");
-const displayNextDay = van.state(true);
+const displayNextDay = van.state(false);
 const todayDate = van.state(new Date());
 const showHolidayProgram = van.state(isHolidayProgram(todayDate.val));
 
