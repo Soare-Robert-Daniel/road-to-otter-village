@@ -34,6 +34,10 @@
     }
 
     body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
       background-color: var(--secondary-color);
       margin: 0px;
       padding: 0px;
@@ -44,12 +48,7 @@
       max-width: 500px;
       display: flex;
       flex-direction: column;
-    }
-
-    @media (min-width: 500px) {
-      #app {
-        margin: 0 auto;
-      }
+      flex-wrap: wrap;
     }
 
     .settings {
@@ -95,8 +94,6 @@
       display: flex;
       flex-direction: row;
       padding: 4px;
-
-      width: 100%;
     }
 
     .hours-display-container {
@@ -149,12 +146,13 @@
     }
 
     .instructions {
-      margin: 20px auto;
       max-width: 500px;
 
       display: flex;
       flex-direction: column;
       gap: 10px;
+
+      width: 350px;
     }
 
     .instructions details {
@@ -173,6 +171,16 @@
       text-align: center;
       font-size: 20px;
       margin: 0 auto;
+    }
+
+    @media (min-width: 500px) {
+      #app {
+        margin: 0 auto;
+      }
+
+      .instructions {
+        margin: 20px auto;
+      }
     }
     </style>
 </head>
