@@ -1,7 +1,10 @@
+// Read more about Van.js at https://vanjs.org
 import van from "./van-1.2.8.min.js";
-
 const { div, option, select, input, label, p, sub } = van.tags;
 
+/**
+ * Romanian national holidays list.
+ */
 const romanianNationalHolidays = [
   "01-01", // Anul Nou
   "01-02", // A doua zi de Anul Nou
@@ -17,6 +20,9 @@ const romanianNationalHolidays = [
   "12-26", // A doua zi de Crăciun
 ];
 
+/**
+ * Non-fixed holidays list. It must be updated every year.
+ */
 const nonFixedHolidays = [
   "05-03", // Vinerea Mare
   "05-05", // Paștele
@@ -25,7 +31,10 @@ const nonFixedHolidays = [
   "06-24", // A doua zi de Rusalii
 ];
 
-const data = {
+/**
+ * The bus schedule data used to display the hours.
+ */
+const busScheduleData = {
   bus: {
     420: {
       tur: {
@@ -114,10 +123,16 @@ const data = {
         ],
       },
     },
-    438: {},
+    438: {}, // TODO: Add the 438 bus schedule
   },
 };
 
+/**
+ * Check if the given date is a holiday or a weekend.
+ *
+ * @param {Date} date The date to check.
+ * @returns {boolean} True if the date is a holiday or a weekend, false otherwise.
+ */
 const isHolidayProgram = (date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -140,15 +155,27 @@ const isHolidayProgram = (date) => {
   return false;
 };
 
-const busOption = van.state("420");
-const displayNextDay = van.state(false);
+// Pull the saved settings from the local storage
+const savedBusOption = localStorage.getItem("busOption") ?? "420";
+const savedDisplayNextDay = localStorage.getItem("displayNextDay") === "true";
+
+// Initialize the state
+const busOption = van.state(savedBusOption);
+const displayNextDay = van.state(savedDisplayNextDay);
 const todayDate = van.state(new Date());
 const showHolidayProgram = van.state(isHolidayProgram(todayDate.val));
 
+// Save the persisted settings to the local storage
+van.derive(() => {
+  localStorage.setItem("busOption", busOption.val);
+  localStorage.setItem("displayNextDay", displayNextDay.val);
+});
+
+// Update the remaining time at a fixed interval.
 setInterval(() => {
   const currentDate = new Date();
 
-  // Check if the hour and minute are the same
+  // Skip if the hour and minute are the same
   if (
     currentDate.getHours() === todayDate.val.getHours() &&
     currentDate.getMinutes() === todayDate.val.getMinutes()
@@ -159,8 +186,58 @@ setInterval(() => {
   todayDate.val = new Date();
 }, 450);
 
-// +------------- Components -------------+
+/**
+ * @typedef {Object} ComputedHour
+ * @property {string} hour The hour in the format "HH:MM" (24h format).
+ * @property {string} remainingTime The remaining time in format "HH:MM" or "SS".
+ * @property {boolean} isNextDay True if the hour is for the next day, false otherwise.
+ */
 
+/**
+ * For a given hour from the bus schedule, compute the remaining time until that hour and if it's for the next day.
+ *
+ * @param {string} hour The hour to compute.
+ * @returns {ComputedHour} The computed hour.
+ */
+const computeHour = (hour) => {
+  const [hourStr, minuteStr] = hour.split(":");
+
+  const hourDate = new Date();
+  hourDate.setHours(hourStr);
+  hourDate.setMinutes(minuteStr);
+  hourDate.setSeconds(0);
+
+  const timeDiff = hourDate - todayDate.val;
+  if (timeDiff < 0) {
+    // Get the time remaining until the next day at the same hour.
+    hourDate.setDate(todayDate.val.getDate() + 1);
+  }
+
+  const diffDate = new Date(hourDate - todayDate.val);
+
+  // Create the remaining time string. Add a leading zero if the number is less than 10 to keep the format consistent.
+  let remainingTime = `${diffDate
+    .getUTCHours()
+    .toString()
+    .padStart(2, "0")}:${diffDate.getUTCMinutes().toString().padStart(2, "0")}`;
+
+  // If the remaining time is less than minute, display only the seconds.
+  if (diffDate.getUTCHours() == 0 && diffDate.getUTCMinutes() == 0) {
+    remainingTime = `${diffDate.getUTCSeconds().toString().padStart(2, "0")}`;
+  }
+
+  return {
+    hour,
+    remainingTime,
+    isNextDay: timeDiff < 0,
+  };
+};
+
+/**
+ * Render the settings component.
+ *
+ * @returns {HTMLElement} The settings component.
+ */
 const Settings = () => {
   return div(
     {
@@ -204,37 +281,13 @@ const Settings = () => {
   );
 };
 
-const diffHour = (hour) => {
-  const [hourStr, minuteStr] = hour.split(":");
-
-  const hourDate = new Date();
-  hourDate.setHours(hourStr);
-  hourDate.setMinutes(minuteStr);
-  hourDate.setSeconds(0);
-
-  const diff = hourDate - todayDate.val;
-  if (diff < 0) {
-    hourDate.setDate(todayDate.val.getDate() + 1);
-  }
-
-  const diffDate = new Date(hourDate - todayDate.val);
-
-  let remainingTime = `${diffDate
-    .getUTCHours()
-    .toString()
-    .padStart(2, "0")}:${diffDate.getUTCMinutes().toString().padStart(2, "0")}`;
-
-  if (diffDate.getUTCHours() == 0 && diffDate.getUTCMinutes() == 0) {
-    remainingTime = `${diffDate.getUTCSeconds().toString().padStart(2, "0")}`;
-  }
-
-  return {
-    hour,
-    remainingTime,
-    isNextDay: diff < 0,
-  };
-};
-
+/**
+ * Render the hours display component.
+ *
+ * @param {Object} props The component props.
+ * @param {ComputedHour[]} props.computedHours The computed hours list.
+ * @returns {HTMLElement} The hours display component.
+ */
 const HoursDisplay = ({ computedHours }) => {
   return div(
     {
@@ -264,6 +317,13 @@ const HoursDisplay = ({ computedHours }) => {
   );
 };
 
+/**
+ * Render the hours column display component.
+ * @param {Object} props The component props.
+ * @param {string} props.title The column title.
+ * @param {ComputedHour[]} props.computedHours The computed hours list.
+ * @returns {HTMLElement} The hours column display component.
+ */
 const HoursColumnDisplay = ({ title, computedHours }) => {
   return div(
     {
@@ -279,21 +339,25 @@ const HoursColumnDisplay = ({ title, computedHours }) => {
   );
 };
 
+/**
+ * Render the hours section display component.
+ * @returns {HTMLElement} The hours section display component.
+ */
 const HoursSectionDisplay = () => {
   const turComputedHours = (
     showHolidayProgram.val
-      ? data.bus[busOption.val].tur.holidayHours
-      : data.bus[busOption.val].tur.workingHours
+      ? busScheduleData.bus[busOption.val].tur.holidayHours
+      : busScheduleData.bus[busOption.val].tur.workingHours
   )
-    .map(diffHour)
+    .map(computeHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
 
   const returComputedHours = (
     showHolidayProgram.val
-      ? data.bus[busOption.val].retur.holidayHours
-      : data.bus[busOption.val].retur.workingHours
+      ? busScheduleData.bus[busOption.val].retur.holidayHours
+      : busScheduleData.bus[busOption.val].retur.workingHours
   )
-    .map(diffHour)
+    .map(computeHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
 
   if (turComputedHours.length === 0 && returComputedHours.length === 0) {
@@ -325,5 +389,6 @@ const HoursSectionDisplay = () => {
   );
 };
 
+// Add the components to the DOM to be rendered.
 van.add(document.querySelector("#settings"), Settings());
 van.add(document.querySelector("#app"), () => HoursSectionDisplay());
