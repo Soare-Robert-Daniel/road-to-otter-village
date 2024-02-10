@@ -315,11 +315,11 @@ const HoursSectionDisplay = () => {
       className: "hours-display-section",
     },
     HoursColumnDisplay({
-      title: "Tur (Spre București)",
+      title: "Spre București",
       computedHours: turComputedHours,
     }),
     HoursColumnDisplay({
-      title: "Retur (Spre Vidra)",
+      title: "Spre Vidra",
       computedHours: returComputedHours,
     })
   );
