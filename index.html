@@ -160,7 +160,6 @@
     }
 
     .instructions details {
-      padding: 10px;
       background-color: var(--primary-color);
       color: #fff;
       border-radius: 5px;
@@ -169,6 +168,19 @@
     .instructions a {
       color: var(--tertiary-color);
       text-decoration: underline;
+    }
+
+    .instructions details summary {
+      padding: 10px;
+    }
+
+    .instructions details[open] summary {
+      background-color: #038a61;
+    }
+
+    .instructions details p {
+      padding: 10px;
+      margin: 0px 10px;
     }
 
     .no-hours {
@@ -216,6 +228,7 @@
       <p> Fiecare linie reprezintă ora de plecare din capătul de linie al direcției respective. </p>
       <p> Fiecare oră de plecare este însoțită de timpul rămas până la plecare. Timpul rămas este calculat în funcție de ora curentă a dispozitivului tău. </p>
       <p> Dacă opțiunea <b>Complet</b> este activată, va fi afișat tot programul, iar timpul rămas pentru orele trecute va fi calculat în raport cu următoare zi.</p>
+      <p>Dacă doriți un acces mai rapid, aplicația poate fi instalată pe telefon. Pentru a instala, apăsați pe cele 3 puncte pentu a accesa meniul de setări, apoi apăsați pe opțiunea Instalare (Install app). După confirmare, aplicația va apărea alături de celelalte programe din telefonul dumneavoastră</p>
     </details>
     <details>
       <summary>Alte resurse</summary>
