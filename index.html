@@ -1,265 +1,383 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Drumul Spre Vidra</title>
-  <link rel="icon" href="assets/favicon.ico">
-  <meta charset="UTF-16">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra">
-  <meta name="keywords" content="ilfov, vidra, progam autobuz din stațiile de plecare">
-  <meta property="og:title" content="Drumul Spre Vidra">
-  <meta property="og:description" content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra">
-  <meta property="og:url" content="https://road-to-otter-village.vercel.app">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://road-to-otter-village.vercel.app/assets/logo.png">
-  <meta property="og:locale" content="ro_RO">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Drumul Spre Vidra">
-  <meta name="twitter:description" content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra">
-  <meta name="twitter:image" content="https://road-to-otter-village.vercel.app/assets/logo.png">
-  <meta name="twitter:site" content="@drumul_spre_vidra">
-  <meta name="twitter:creator" content="@drumul_spre_vidra">
-  <link rel="canonical" href="https://road-to-otter-village.vercel.app">
-  <meta name="robots" content="index, follow">
-  <meta name="author" content="Robert de la Vidra">
-  <link rel="manifest" href="/manifest.json">
-  <style>
-    :root {
-      --primary-color: #e74645;
-      --secondary-color: #facd60;
-      --tertiary-color: #f9bf39;
-      --complementary-color: teal;
-      --hours-font-size: 27px;
-      --header-font-size: 22px;
-    }
+  <head>
+    <title>Drumul Spre Vidra</title>
+    <link rel="icon" href="assets/favicon.ico" />
+    <meta charset="UTF-16" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra"
+    />
+    <meta
+      name="keywords"
+      content="ilfov, vidra, progam autobuz din stațiile de plecare"
+    />
+    <meta property="og:title" content="Drumul Spre Vidra" />
+    <meta
+      property="og:description"
+      content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra"
+    />
+    <meta
+      property="og:url"
+      content="https://road-to-otter-village.vercel.app"
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://road-to-otter-village.vercel.app/assets/logo.png"
+    />
+    <meta property="og:locale" content="ro_RO" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Drumul Spre Vidra" />
+    <meta
+      name="twitter:description"
+      content="Vezi rapid orarul de la stațiile de plecare. Tur și return spre Vidra"
+    />
+    <meta
+      name="twitter:image"
+      content="https://road-to-otter-village.vercel.app/assets/logo.png"
+    />
+    <meta name="twitter:site" content="@drumul_spre_vidra" />
+    <meta name="twitter:creator" content="@drumul_spre_vidra" />
+    <link rel="canonical" href="https://road-to-otter-village.vercel.app" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Robert de la Vidra" />
+    <link rel="manifest" href="/manifest.json" />
+    <style>
+      :root {
+        --primary-color: #6fd89e;
+        --settings-color: #e74645;
+        --secondary-color: #facd60;
+        --tertiary-color: black;
+        --complementary-color: teal;
+        --hours-font-size: 27px;
+        --header-font-size: 22px;
+      }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-      gap: 10px;
+        gap: 10px;
 
-      background-color: var(--secondary-color);
-      margin: 0px;
-      padding: 0px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    }
+        background-color: var(--secondary-color);
+        margin: 0px;
+        padding: 0px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+          sans-serif;
+      }
 
-    #app, #settings {
-      max-width: 500px;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-    }
+      #app,
+      #settings {
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+      }
 
-    .settings {
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      padding: 10px 5px;
-      background-color: var(--primary-color);
-      gap: 15px;
+      .settings {
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px 5px;
+        background-color: var(--settings-color);
+        gap: 15px;
 
-      border-radius: 0px 0px 5px 5px;
-    }
+        border-radius: 0px 0px 5px 5px;
+      }
 
-    .settings label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      line-height: 1.1;
-      font-weight: bold;
-      font-size: 1.1rem;
-      
-      width: min-content;
-    }
+      .settings label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        line-height: 1.1;
+        font-weight: bold;
+        font-size: 1.1rem;
 
-    .settings select {
+        width: min-content;
+      }
+
+      .settings select {
         padding: 5px 2px;
         font-size: 16px;
         font-weight: bold;
-    }
+      }
 
-    .settings input[type="checkbox"] {
+      .settings input[type="checkbox"] {
         width: 30px;
         height: 30px;
         margin: 0;
         padding: 0px;
-    }
+      }
 
-    .next-day {
+      .next-day {
         color: #fc0000;
-    }
+      }
 
-    .program-select {
-      max-width: 150px;
-    }
+      .program-select {
+        max-width: 150px;
+      }
 
-    .hours-display-section {
-      display: flex;
-      flex-direction: row;
-      padding: 4px;
-    }
+      .hours-display-section {
+        display: flex;
+        flex-direction: row;
+        padding: 4px;
+      }
 
-    .hours-display-container {
-      display: flex;
-      flex-direction: column;
+      .hours-display-container {
+        display: flex;
+        flex-direction: column;
 
-      align-items: center;
+        align-items: center;
 
-      gap: 10px;
-    }
-
-    .hours-display-column {
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      min-width: 170px;
-    }
-
-    .hours-display-column:first-child {
-      border-right: 1px solid #000;
-    }
-
-    .hours-display-column:last-child {
-      border-left: 1px solid #000;
-    }
-
-    .hours-display-header {
-      text-align: center;
-      font-size: var(--header-font-size);
-      font-weight: bold;
-      border-bottom: 1px solid #000;
-    }
-
-    .hours-display-header p {
-      margin: 0px 5px;
-      margin-bottom: 10px;
-    }
-
-    .hour {
-      display: flex;
-      flex-direction: row;
-
-      border-radius: 5px;
-    }
-
-    .hour-time {
-      font-size: var(--hours-font-size);
-      margin: 0;
-    }
-
-    .hour-remaning-time {
-      font-size: calc(var(--hours-font-size) / 1.5);
-    }
-
-    .instructions {
-      max-width: 500px;
-
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-
-      width: 95%;
-
-      margin-top: 10px;
-    }
-
-    .instructions details {
-      background-color: var(--primary-color);
-      color: #fff;
-      border-radius: 5px;
-    }
-
-    .instructions a {
-      color: var(--tertiary-color);
-      text-decoration: underline;
-    }
-
-    .instructions details summary {
-      padding: 10px;
-    }
-
-    .instructions details[open] summary {
-      background-color: #038a61;
-    }
-
-    .instructions details p {
-      padding: 10px;
-      margin: 0px 10px;
-    }
-
-    .no-hours {
-      text-align: center;
-      font-size: 20px;
-      margin: 0 auto;
-    }
-
-    .notice-display {
-      margin: 0px;
-      text-align: center;
-    }
-
-    .notice-display p {
-      text-decoration: underline;
-      text-decoration-color: var(--complementary-color);
-      text-decoration-thickness: 4px;
-      text-underline-offset: 5px;
-
-    }
-
-    @media (min-width: 800px) {
-      .settings {
-        padding: 10px 40px;
         gap: 10px;
       }
-    }
 
-    @media (max-width: 500px) {
-
-      body {
-        padding-bottom: 60px;
+      .hours-display-column {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-width: 170px;
       }
 
-      #settings {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
+      .hours-display-column:first-child {
+        border-right: 1px solid #000;
       }
 
-      .settings {
-        border-radius: 15px 15px 0px 0px;
-        box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.4)
+      .hours-display-column:last-child {
+        border-left: 1px solid #000;
       }
-    }
+
+      .hours-display-header {
+        text-align: center;
+        font-size: var(--header-font-size);
+        font-weight: bold;
+        border-bottom: 1px solid #000;
+      }
+
+      .hours-display-header p {
+        margin: 0px 5px;
+        margin-bottom: 10px;
+      }
+
+      .hour {
+        display: flex;
+        flex-direction: row;
+
+        border-radius: 5px;
+      }
+
+      .hour-time {
+        font-size: var(--hours-font-size);
+        margin: 0;
+      }
+
+      .hour-remaning-time {
+        font-size: calc(var(--hours-font-size) / 1.5);
+      }
+
+      .instructions {
+        max-width: 500px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        width: 95%;
+
+        margin-top: 10px;
+      }
+
+      .instructions details {
+        background-color: var(--primary-color);
+        border-radius: 5px;
+      }
+
+      .instructions a {
+        color: var(--tertiary-color);
+        text-decoration: underline;
+        text-decoration-color: var(--complementary-color);
+        text-decoration-thickness: 2px;
+        text-underline-offset: 5px;
+      }
+
+      .instructions details summary {
+        padding: 10px;
+      }
+
+      .instructions details[open] summary {
+        background-color: #038a61;
+      }
+
+      .instructions details p {
+        padding: 10px;
+        margin: 0px 10px;
+      }
+
+      .no-hours {
+        text-align: center;
+        font-size: 20px;
+        margin: 0 auto;
+      }
+
+      .notice-display {
+        margin: 0px;
+        text-align: center;
+      }
+
+      .notice-display p {
+        text-decoration: underline;
+        text-decoration-color: var(--complementary-color);
+        text-decoration-thickness: 4px;
+        text-underline-offset: 5px;
+      }
+
+      @media (min-width: 800px) {
+        .settings {
+          padding: 10px 40px;
+          gap: 10px;
+        }
+      }
+
+      @media (max-width: 500px) {
+        body {
+          padding-bottom: 60px;
+        }
+
+        #settings {
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+        }
+
+        .settings {
+          border-radius: 15px 15px 0px 0px;
+          box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.4);
+        }
+      }
     </style>
-</head>
-<body>
-  <div id="settings"></div>
-  <div id="app"></div>
-  <div id="notice"></div>
-  <div class="instructions">
-    <details>
-      <summary>Instrucțiuni</summary>
-      <p> Fiecare coloană reprezintă un sens de mers. Prima coloană este pentru mersul spre București (Tur), iar a doua coloană este pentru mersul spre Vidra (Retur). </p>
-      <p> Ora afișată este cea de plecare din capătul de linie al direcției respective. </p>
-      <p> Fiecare linie reprezintă ora de plecare din capătul de linie al direcției respective. </p>
-      <p> Fiecare oră de plecare este însoțită de timpul rămas până la plecare. Timpul rămas este calculat în funcție de ora curentă a dispozitivului tău. </p>
-      <p> Dacă opțiunea <b>Complet</b> este activată, va fi afișat tot programul, iar timpul rămas pentru orele trecute va fi calculat în raport cu următoare zi.</p>
-      <p>Dacă doriți un acces mai rapid, aplicația poate fi instalată pe telefon. Pentru a instala, apăsați pe cele 3 puncte pentu a accesa meniul de setări, apoi apăsați pe opțiunea Instalare (Install app). După confirmare, aplicația va apărea alături de celelalte programe din telefonul dumneavoastră</p>
-    </details>
-    <details>
-      <summary>Alte resurse</summary>
-      <p>Program oficial: <a href="https://www.stbsa.ro/program_linie?420">Program Linie 420</a></p>
-      <p>Hartă interactivă: <a href="https://info.stbsa.ro/traseu/843">info.stbsa.ro</a></p>
-      <p><a href="https://github.com/Soare-Robert-Daniel/road-to-otter-village">Cod sursă</a> <a href="mailto:report-program-incorect.overbite446@passmail.net">Raportează problemă</a></p>
-    </details>
-  </div>
-  
-  <script src="./main.mjs" type="module" async></script>
-</body>
-<footer>
-   
-</footer>
+  </head>
+
+  <body>
+    <div id="settings"></div>
+    <div id="app"></div>
+    <div id="notice"></div>
+    <div class="instructions">
+      <details>
+        <summary>Instrucțiuni</summary>
+        <p>
+          Fiecare coloană reprezintă un sens de mers. Prima coloană este pentru
+          mersul spre București (Tur), iar a doua coloană este pentru mersul
+          spre Vidra (Retur).
+        </p>
+        <p>
+          Ora afișată este cea de plecare din capătul de linie al direcției
+          respective.
+        </p>
+        <p>
+          Fiecare linie reprezintă ora de plecare din capătul de linie al
+          direcției respective.
+        </p>
+        <p>
+          Fiecare oră de plecare este însoțită de timpul rămas până la plecare.
+          Timpul rămas este calculat în funcție de ora curentă a dispozitivului
+          tău.
+        </p>
+        <p>
+          Dacă opțiunea <b>Complet</b> este activată, va fi afișat tot
+          programul, iar timpul rămas pentru orele trecute va fi calculat în
+          raport cu următoare zi.
+        </p>
+        <p>
+          Dacă doriți un acces mai rapid, aplicația poate fi instalată pe
+          telefon. Pentru a instala, apăsați pe cele 3 puncte pentu a accesa
+          meniul de setări, apoi apăsați pe opțiunea Instalare (Install app).
+          După confirmare, aplicația va apărea alături de celelalte programe din
+          telefonul dumneavoastră
+        </p>
+      </details>
+      <details>
+        <summary>Alte resurse</summary>
+        <p>
+          Program oficial:
+          <a href="https://www.stbsa.ro/program_linie?420">Program Linie 420</a>
+          <svg
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+          />
+        </p>
+        <p>
+          Hartă interactivă:
+          <a href="https://info.stbsa.ro/traseu/843">info.stbsa.ro</a>
+          <svg
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+          />
+        </p>
+        <p>
+          <a href="https://github.com/Soare-Robert-Daniel/road-to-otter-village"
+            >Cod sursă</a
+          >
+          <svg
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+            />
+          </svg>
+          <a href="mailto:report-program-incorect.overbite446@passmail.net"
+            >Raportează problemă</a
+          >
+          <svg
+          width="16"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+          />
+        </p>
+      </details>
+    </div>
+
+    <script src="./main.mjs" type="module" async></script>
+  </body>
+  <footer></footer>
 </html>
