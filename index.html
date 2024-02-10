@@ -28,6 +28,7 @@
       --primary-color: #e74645;
       --secondary-color: #facd60;
       --tertiary-color: #f9bf39;
+      --complementary-color: teal;
       --hours-font-size: 27px;
       --header-font-size: 22px;
     }
@@ -36,6 +37,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
+      gap: 10px;
 
       background-color: var(--secondary-color);
       margin: 0px;
@@ -56,6 +59,7 @@
       align-items: center;
       padding: 10px 5px;
       background-color: var(--primary-color);
+      gap: 15px;
 
       border-radius: 0px 0px 5px 5px;
     }
@@ -64,19 +68,22 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      line-height: 0;
+      line-height: 1.1;
       font-weight: bold;
+      font-size: 1.1rem;
+      
+      width: min-content;
     }
 
     .settings select {
-        padding: 5px;
+        padding: 5px 2px;
         font-size: 16px;
         font-weight: bold;
     }
 
     .settings input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
+        width: 30px;
+        height: 30px;
         margin: 0;
         padding: 0px;
     }
@@ -189,13 +196,23 @@
       margin: 0 auto;
     }
 
-    @media (min-width: 500px) {
-      #app, #settings {
-        margin: 0 auto;
-      }
+    .notice-display {
+      margin: 0px;
+      text-align: center;
+    }
 
-      .instructions {
-        margin: 20px auto;
+    .notice-display p {
+      text-decoration: underline;
+      text-decoration-color: var(--complementary-color);
+      text-decoration-thickness: 4px;
+      text-underline-offset: 5px;
+
+    }
+
+    @media (min-width: 800px) {
+      .settings {
+        padding: 10px 40px;
+        gap: 10px;
       }
     }
 
@@ -212,7 +229,8 @@
       }
 
       .settings {
-        border-radius: 5px 5px 0px 0px;
+        border-radius: 15px 15px 0px 0px;
+        box-shadow: 0px -3px 10px 0px rgba(0, 0, 0, 0.4)
       }
     }
     </style>
@@ -220,6 +238,7 @@
 <body>
   <div id="settings"></div>
   <div id="app"></div>
+  <div id="notice"></div>
   <div class="instructions">
     <details>
       <summary>Instrucțiuni</summary>

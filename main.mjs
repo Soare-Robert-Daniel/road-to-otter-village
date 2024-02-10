@@ -64,7 +64,7 @@ const busScheduleData = {
           "21:35",
           "22:25",
         ],
-        holidayHours: [
+        weekendHours: [
           "5:35",
           "6:50",
           "8:10",
@@ -106,7 +106,7 @@ const busScheduleData = {
           "21:55",
           "22:45",
         ],
-        holidayHours: [
+        weekendHours: [
           "5:30",
           "6:45",
           "8:05",
@@ -128,12 +128,12 @@ const busScheduleData = {
 };
 
 /**
- * Check if the given date is a holiday or a weekend.
+ * Check if the given date is a holiday.
  *
  * @param {Date} date The date to check.
- * @returns {boolean} True if the date is a holiday or a weekend, false otherwise.
+ * @returns {boolean} True if the date is a holiday, false otherwise.
  */
-const isHolidayProgram = (date) => {
+const isHoliday = (date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
 
@@ -147,12 +147,27 @@ const isHolidayProgram = (date) => {
     return true;
   }
 
-  // Saturday and Sunday have the same program.
-  if (date.getDay() === 0 || date.getDay() === 6) {
-    return true;
-  }
-
   return false;
+};
+
+/**
+ * Check if the given date is a weekend.
+ *
+ * @param {Date} date The date to check.
+ * @returns {boolean} True if the date is a weekend, false otherwise.
+ */
+const isWeekend = (date) => {
+  return date.getDay() === 0 || date.getDay() === 6;
+};
+
+/**
+ * Check if the given date has a weekend program. Holidays have the same program as the weekend.
+ *
+ * @param {Date} date The date to check.
+ * @returns {boolean} True if the date is a holiday or a weekend, false otherwise.
+ */
+const isWeekendProgram = (date) => {
+  return isWeekend(date) || isHoliday(date);
 };
 
 // Pull the saved settings from the local storage
@@ -163,7 +178,7 @@ const savedDisplayNextDay = localStorage.getItem("displayNextDay") === "true";
 const busOption = van.state(savedBusOption);
 const displayNextDay = van.state(savedDisplayNextDay);
 const todayDate = van.state(new Date());
-const showHolidayProgram = van.state(isHolidayProgram(todayDate.val));
+const showWeekendProgram = van.state(isWeekendProgram(todayDate.val));
 
 // Save the persisted settings to the local storage
 van.derive(() => {
@@ -257,13 +272,21 @@ const Settings = () => {
       select(
         {
           onchange: (e) => {
-            showHolidayProgram.val = e.target.value === "holiday";
+            showWeekendProgram.val = e.target.value === "holiday";
           },
-          value: showHolidayProgram.val ? "holiday" : "work",
           className: "program-select",
         },
-        option({ value: "work" }, "Zi de lucru"),
-        option({ value: "holiday" }, "Sărbătoare/Weekend")
+        option(
+          {
+            value: "work",
+            selected: !showWeekendProgram.val,
+          },
+          "Zi de lucru"
+        ),
+        option(
+          { value: "holiday", selected: showWeekendProgram.val },
+          "Weekend"
+        )
       )
     ),
     div(
@@ -275,7 +298,7 @@ const Settings = () => {
           },
           checked: displayNextDay.val,
         }),
-        "Complet"
+        "Program Complet"
       )
     )
   );
@@ -345,16 +368,16 @@ const HoursColumnDisplay = ({ title, computedHours }) => {
  */
 const HoursSectionDisplay = () => {
   const turComputedHours = (
-    showHolidayProgram.val
-      ? busScheduleData.bus[busOption.val].tur.holidayHours
+    showWeekendProgram.val
+      ? busScheduleData.bus[busOption.val].tur.weekendHours
       : busScheduleData.bus[busOption.val].tur.workingHours
   )
     .map(computeHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
 
   const returComputedHours = (
-    showHolidayProgram.val
-      ? busScheduleData.bus[busOption.val].retur.holidayHours
+    showWeekendProgram.val
+      ? busScheduleData.bus[busOption.val].retur.weekendHours
       : busScheduleData.bus[busOption.val].retur.workingHours
   )
     .map(computeHour)
@@ -389,6 +412,29 @@ const HoursSectionDisplay = () => {
   );
 };
 
+/**
+ * Render the notice display component.
+ *
+ * @returns {HTMLElement} The notice display component.
+ */
+const NoticeDisplay = () => {
+  if (!showWeekendProgram.val) {
+    return div();
+  }
+
+  if (!isHoliday(todayDate.val)) {
+    return div();
+  }
+
+  return div(
+    {
+      className: "notice-display",
+    },
+    p("Astăzi este sărbătoare! Este afișat programul de weekend.")
+  );
+};
+
 // Add the components to the DOM to be rendered.
 van.add(document.querySelector("#settings"), Settings());
 van.add(document.querySelector("#app"), () => HoursSectionDisplay());
+van.add(document.querySelector("#notice"), () => NoticeDisplay());
