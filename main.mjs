@@ -438,3 +438,22 @@ const NoticeDisplay = () => {
 van.add(document.querySelector("#settings"), Settings());
 van.add(document.querySelector("#app"), () => HoursSectionDisplay());
 van.add(document.querySelector("#notice"), () => NoticeDisplay());
+
+/**
+ * Have the Manual opened until the user closes it via the acknowledge button.
+ */
+window.onload = () => {
+  const firstTimeInstructions = localStorage.getItem("firstTimeInstructions");
+
+  const manual = document.querySelector("#manual");
+
+  if (Boolean(firstTimeInstructions)) {
+    return;
+  }
+
+  manual?.setAttribute("open", "true");
+  manual?.querySelector(".btn.close")?.addEventListener("click", () => {
+    localStorage.setItem("firstTimeInstructions", "true");
+    manual?.removeAttribute("open");
+  });
+};

@@ -235,6 +235,27 @@
         text-underline-offset: 5px;
       }
 
+      .actions {
+        padding: 10px;
+        display: flex;
+        flex-direction: row-reverse;
+      }
+
+      .actions .btn {
+        padding: 5px 20px;
+        font-size: 16px;
+        background-color: var(--settings-color);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.4);
+      }
+
+      .btn:hover {
+        background-color: var(--complementary-color);
+      }
+
       @media (min-width: 800px) {
         .settings {
           padding: 10px 40px;
@@ -266,8 +287,11 @@
     <div id="app"></div>
     <div id="notice"></div>
     <div class="instructions">
-      <details>
-        <summary>Instrucțiuni</summary>
+      <details id="manual">
+        <summary>Manual - Instrucțiuni</summary>
+        <p>
+          Manual poate fi oricând deschis sau închis apăsând pe titlul acestuia.
+        </p>
         <p>
           Fiecare coloană reprezintă un sens de mers. Prima coloană este pentru
           mersul spre București (Tur), iar a doua coloană este pentru mersul
@@ -287,9 +311,12 @@
           tău.
         </p>
         <p>
-          Dacă opțiunea <b>Complet</b> este activată, va fi afișat tot
+          Dacă opțiunea <b>Program Complet</b> este bifată (prin apăsare), va fi afișat tot
           programul, iar timpul rămas pentru orele trecute va fi calculat în
-          raport cu următoare zi.
+          raport cu următoare zi (folosind același program).
+        </p>
+        <p>
+          Linia de autobuz și tipul de program se pot schimba folosing cele două optiuni de selecție (disponibile în chenarul roșu). Apăsați pe ele pentru a selecta alte opțiuni.
         </p>
         <p>
           Dacă doriți un acces mai rapid, aplicația poate fi instalată pe
@@ -298,6 +325,9 @@
           După confirmare, aplicația va apărea alături de celelalte programe din
           telefonul dumneavoastră
         </p>
+        <div class="actions">
+          <button class="btn close">Am înțeles. Închide manualul.</button>
+        </div>
       </details>
       <details>
         <summary>Alte resurse</summary>
