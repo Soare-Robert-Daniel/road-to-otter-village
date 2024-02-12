@@ -418,19 +418,19 @@ const HoursSectionDisplay = () => {
  * @returns {HTMLElement} The notice display component.
  */
 const NoticeDisplay = () => {
-  if (!showWeekendProgram.val) {
-    return div();
-  }
-
-  if (!isHoliday(todayDate.val)) {
-    return div();
-  }
+  const isHolidayToday = isHoliday(todayDate.val);
 
   return div(
     {
       className: "notice-display",
     },
-    p("Astăzi este sărbătoare! Este afișat programul de weekend.")
+    p(
+      () => (isHolidayToday ? "Astăzi este sărbătoare!" : ""),
+      () =>
+        showWeekendProgram.val || isHolidayToday
+          ? p("Este afișat programul de weekend.")
+          : ""
+    )
   );
 };
 
