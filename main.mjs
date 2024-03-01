@@ -1,6 +1,6 @@
 // Read more about Van.js at https://vanjs.org
 import van from "./van-1.2.8.min.js";
-const { div, option, select, input, label, p, sub } = van.tags;
+const { div, option, select, input, label, p, sub, span } = van.tags;
 
 /**
  * Romanian national holidays list.
@@ -348,7 +348,7 @@ const HoursDisplay = ({ computedHours }) => {
  * @param {ComputedHour[]} props.computedHours The computed hours list.
  * @returns {HTMLElement} The hours column display component.
  */
-const HoursColumnDisplay = ({ title, computedHours }) => {
+const HoursColumnDisplay = ({ prefix, title, computedHours }) => {
   return div(
     {
       className: "hours-display-column",
@@ -357,7 +357,7 @@ const HoursColumnDisplay = ({ title, computedHours }) => {
       {
         className: "hours-display-header",
       },
-      p(title)
+      p({}, span({ className: "title-prefix" }, prefix), title)
     ),
     HoursDisplay({ computedHours })
   );
@@ -403,11 +403,13 @@ const HoursSectionDisplay = () => {
       className: "hours-display-section",
     },
     HoursColumnDisplay({
-      title: "Spre București",
+      prefix: "Spre",
+      title: "București",
       computedHours: turComputedHours,
     }),
     HoursColumnDisplay({
-      title: "Spre Vidra",
+      prefix: "Spre",
+      title: "Vidra",
       computedHours: returComputedHours,
     })
   );
