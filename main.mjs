@@ -124,7 +124,107 @@ const busScheduleData = {
         ],
       },
     },
-    438: {}, // TODO: Add the 438 bus schedule
+    438: {
+      tur: {
+        workingHours: [
+          "4:50",
+          "5:20",
+          "5:45",
+          "6:15",
+          "6:45",
+          "7:20",
+          "7:55",
+          "8:30",
+          "9:10",
+          "9:45",
+          "10:20",
+          "11:00",
+          "11:40",
+          "12:25",
+          "13:10",
+          "13:57",
+          "14:37",
+          "15:10",
+          "15:42",
+          "16:10",
+          "16:37",
+          "17:09",
+          "17:44",
+          "18:14",
+          "18:47",
+          "19:25",
+          "20:02",
+          "20:42",
+          "21:18",
+          "21:51",
+          "22:30",
+        ],
+        weekendHours: [
+          "5:00",
+          "6:10",
+          "7:30",
+          "8:50",
+          "10:15",
+          "11:40",
+          "14:14",
+          "17:14",
+          "18:37",
+          "20:02",
+          "21:24",
+          "22:15",
+          "23:10",
+        ],
+      },
+      retur: {
+        workingHours: [
+          "5:10",
+          "5:40",
+          "6:14",
+          "6:53",
+          "7:27",
+          "8:03",
+          "8:38",
+          "9:11",
+          "9:40",
+          "10:16",
+          "10:48",
+          "11:23",
+          "12:03",
+          "12:45",
+          "13:30",
+          "14:15",
+          "15:00",
+          "15:40",
+          "16:14",
+          "16:50",
+          "17:20",
+          "17:50",
+          "18:20",
+          "18:52",
+          "19:20",
+          "19:50",
+          "20:25",
+          "21:00",
+          "21:35",
+          "22:10",
+          "22:40",
+        ],
+        weekendHours: [
+          "4:50",
+          "5:50",
+          "7:00",
+          "8:20",
+          "9:48",
+          "12:55",
+          "15:20",
+          "16:50",
+          "18:15",
+          "19:35",
+          "20:55",
+          "22:15",
+        ],
+      },
+    },
   },
 };
 
@@ -262,10 +362,14 @@ const Settings = () => {
     div(
       select(
         {
-          onchange: (e) => (busOption = e.target.value),
+          onchange: (e) => (busOption.val = e.target.value),
           value: busOption.val,
         },
-        option({ value: "420" }, "Linia🌿420")
+        option(
+          { value: "420", selected: "420" === busOption.val },
+          "Linia🌿420"
+        ),
+        option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
         // option({ value: "438" }, "438")
       )
     ),
@@ -437,10 +541,20 @@ const NoticeDisplay = () => {
   );
 };
 
+/**
+ * Render the line display component.
+ *
+ * @returns {HTMLElement} The line display component.
+ */
+const LineDisplay = () => {
+  return busOption.val;
+};
+
 // Add the components to the DOM to be rendered.
-van.add(document.querySelector("#settings"), Settings());
-van.add(document.querySelector("#app"), () => HoursSectionDisplay());
-van.add(document.querySelector("#notice"), () => NoticeDisplay());
+van.add(document.querySelector("#line"), LineDisplay);
+van.add(document.querySelector("#settings"), Settings);
+van.add(document.querySelector("#app"), HoursSectionDisplay);
+van.add(document.querySelector("#notice"), NoticeDisplay);
 
 /**
  * Have the Manual opened until the user closes it via the acknowledge button.

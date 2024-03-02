@@ -60,7 +60,7 @@
         flex-direction: column;
         align-items: center;
 
-        gap: 10px;
+        gap: 0px;
 
         background-color: var(--secondary-color);
         margin: 0px;
@@ -273,6 +273,19 @@
         margin-right: 3px;
       }
 
+      #line {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--tertiary-color);
+      }
+      .changelog {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        flex: 1;
+      }
+
       @media (min-width: 800px) {
         .settings {
           padding: 10px 40px;
@@ -301,13 +314,14 @@
 
   <body>
     <div id="settings"></div>
-    <div id="updates">
-      <p>
-        Program actualizat în data de 29.02.2024
-      </p>
-    </div>
+    <div id="line"></div>
     <div id="app"></div>
     <div id="notice"></div>
+    <div id="updates">
+      <p>
+        Program verficat în data de 02.03.2024
+      </p>
+    </div>
     <div class="instructions">
       <details id="manual">
         <summary>Manual - Instrucțiuni</summary>
@@ -355,7 +369,23 @@
         <summary>Alte resurse</summary>
         <p>
           Program oficial:
-          <a href="https://www.stvsa.ro/traseu-linia-420/">Program Linie 420</a>
+          <a href="https://www.stvsa.ro/traseu-linia-420/">Linia 420</a>
+          <svg
+            width="16"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+            />
+          </svg>
+          <a href="https://www.stvsa.ro/traseu-linia-438/">Linia 438</a>
           <svg
           width="16"
           xmlns="http://www.w3.org/2000/svg"
@@ -407,10 +437,10 @@
             stroke-linejoin="round"
             d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
           />
+        </svg>
         </p>
       </details>
     </div>
-
     <script src="./main.mjs" type="module" async></script>
   </body>
   <footer></footer>
