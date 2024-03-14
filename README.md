@@ -8,7 +8,7 @@
 
 Aplicația este este un simplu site web care afișează o listă cu orele de plecare ale autobuzului la tur și retur. Pentru a utiliza aplicația, aveți nevoie de un browser web.
 
-> ![NOTE]
+> [!NOTE]
 > Orele nu sunt sincronizate în timp real. Ele sunt actualizate manual în funcție de situație. Pentru a obține orele de plecare actuale, vă rugăm să accesați site-ul [RATB](http://www.ratb.ro/).
 
 ## Cum pot modifica aplicația?
