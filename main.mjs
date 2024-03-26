@@ -343,7 +343,7 @@ const computeHour = (hour) => {
   }
 
   return {
-    hour,
+    hour: hour.padStart(5, "0"),
     remainingTime,
     isNextDay: timeDiff < 0,
   };
@@ -362,20 +362,6 @@ const Settings = () => {
     div(
       select(
         {
-          onchange: (e) => (busOption.val = e.target.value),
-          value: busOption.val,
-        },
-        option(
-          { value: "420", selected: "420" === busOption.val },
-          "Linia🌿420"
-        ),
-        option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
-        // option({ value: "438" }, "438")
-      )
-    ),
-    div(
-      select(
-        {
           onchange: (e) => {
             showWeekendProgram.val = e.target.value === "holiday";
           },
@@ -386,11 +372,11 @@ const Settings = () => {
             value: "work",
             selected: !showWeekendProgram.val,
           },
-          "Zi de lucru"
+          "🧰Zi de lucru"
         ),
         option(
           { value: "holiday", selected: showWeekendProgram.val },
-          "Weekend"
+          "🎉Weekend"
         )
       )
     ),
@@ -547,7 +533,15 @@ const NoticeDisplay = () => {
  * @returns {HTMLElement} The line display component.
  */
 const LineDisplay = () => {
-  return busOption.val;
+  return select(
+    {
+      onchange: (e) => (busOption.val = e.target.value),
+      value: busOption.val,
+    },
+    option({ value: "420", selected: "420" === busOption.val }, "Linia🌿420"),
+    option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
+    // option({ value: "438" }, "438")
+  );
 };
 
 // Add the components to the DOM to be rendered.
