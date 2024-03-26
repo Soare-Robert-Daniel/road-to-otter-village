@@ -372,11 +372,11 @@ const Settings = () => {
             value: "work",
             selected: !showWeekendProgram.val,
           },
-          "🧰Zi de lucru"
+          "🧰 Zi de lucru"
         ),
         option(
           { value: "holiday", selected: showWeekendProgram.val },
-          "🎉Weekend"
+          "🎉 Weekend"
         )
       )
     ),
