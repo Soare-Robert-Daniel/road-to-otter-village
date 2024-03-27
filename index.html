@@ -58,12 +58,13 @@
         --secondary-color: white;
         --settings-color: var(--secondary-color);
         --settings-shadow-color: rgba(0, 0, 0, 0.4);
-        --tertiary-color: black;
+        --tertiary-color: rgb(80, 182, 12);
         --complementary-color: rgb(114, 231, 231);
         --hours-font-size: 2.5rem;
         --header-font-size: 2rem;
         --text-color: black;
         --text-secondary-color: #222222;
+        --text-remaining-time-color: #d31717;
       }
 
       body {
@@ -87,6 +88,8 @@
         --settings-shadow-color: rgba(185, 185, 185, 0.795);
         --text-color: white;
         --text-secondary-color: #d6d5d5;
+        --text-remaining-time-color: #da3c3c;
+        --tertiary-color: rgb(154, 207, 118);
       }
       
 
@@ -145,10 +148,6 @@
         height: 18px;
         margin: 0;
         padding: 0px;
-      }
-
-      .next-day {
-        color: #fc0000;
       }
 
       .hours-display-section {
@@ -210,6 +209,10 @@
       .hour-remaning-time {
         font-size: calc(var(--hours-font-size) / 1.5);
         color: var(--text-secondary-color);
+      }
+
+      .next-day {
+        color: var(--text-remaining-time-color);
       }
 
       .instructions {
