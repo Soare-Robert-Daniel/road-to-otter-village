@@ -1,6 +1,6 @@
 // Read more about Van.js at https://vanjs.org
-import van from "./van-1.2.8.min.js";
-const { div, option, select, input, label, p, sub, span } = van.tags;
+import van from "./van.min.js";
+const { div, option, select, input, label, p, sub, span, button } = van.tags;
 
 /**
  * Romanian national holidays list.
@@ -274,17 +274,20 @@ const isWeekendProgram = (date) => {
 // Pull the saved settings from the local storage
 const savedBusOption = localStorage.getItem("busOption") ?? "420";
 const savedDisplayNextDay = localStorage.getItem("displayNextDay") === "true";
+const savedDarkMode = localStorage.getItem("darkMode") === "true";
 
 // Initialize the state
 const busOption = van.state(savedBusOption);
 const displayNextDay = van.state(savedDisplayNextDay);
 const todayDate = van.state(new Date());
 const showWeekendProgram = van.state(isWeekendProgram(todayDate.val));
+const darkMode = van.state(savedDarkMode);
 
 // Save the persisted settings to the local storage
 van.derive(() => {
   localStorage.setItem("busOption", busOption.val);
   localStorage.setItem("displayNextDay", displayNextDay.val);
+  localStorage.setItem("darkMode", darkMode.val);
 });
 
 // Update the remaining time at a fixed interval.
@@ -527,20 +530,40 @@ const NoticeDisplay = () => {
   );
 };
 
+const DarkModeToggle = () => {
+  return div(
+    {
+      className: "dark-mode-toggle",
+    },
+    button(
+      {
+        onclick: () => {
+          document.body.classList.toggle("dark-mode");
+          darkMode.val = !darkMode.val;
+        },
+      },
+      darkMode.val ? "🌞" : "🌙"
+    )
+  );
+};
+
 /**
  * Render the line display component.
  *
  * @returns {HTMLElement} The line display component.
  */
 const LineDisplay = () => {
-  return select(
-    {
-      onchange: (e) => (busOption.val = e.target.value),
-      value: busOption.val,
-    },
-    option({ value: "420", selected: "420" === busOption.val }, "Linia🌿420"),
-    option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
-    // option({ value: "438" }, "438")
+  return div(
+    select(
+      {
+        onchange: (e) => (busOption.val = e.target.value),
+        value: busOption.val,
+      },
+      option({ value: "420", selected: "420" === busOption.val }, "Linia🌿420"),
+      option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
+      // option({ value: "438" }, "438")
+    ),
+    DarkModeToggle
   );
 };
 
@@ -554,6 +577,11 @@ van.add(document.querySelector("#notice"), NoticeDisplay);
  * Have the Manual opened until the user closes it via the acknowledge button.
  */
 window.onload = () => {
+  // Apply the dark mode if it was saved.
+  if (savedDarkMode) {
+    document.body.classList.add("dark-mode");
+  }
+
   const firstTimeInstructions = localStorage.getItem("firstTimeInstructions");
 
   const manual = document.querySelector("#manual");
