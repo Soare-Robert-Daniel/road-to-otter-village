@@ -33,7 +33,7 @@ self.addEventListener("fetch", (event) => {
       const responseDate = new Date(cachedResponse.headers.get("date"));
       const ageInMilliseconds = Date.now() - responseDate.getTime();
 
-      if (ageInMilliseconds > 24 * 60 * 60 * 1000) {
+      if (ageInMilliseconds > 12 * 60 * 60 * 1000) {
         console.log(
           "Cache expired, fetching new data for " + event.request.url
         );
