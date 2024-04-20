@@ -342,7 +342,7 @@ const computeHour = (hour) => {
 
   // If the remaining time is less than minute, display only the seconds.
   if (diffDate.getUTCHours() == 0 && diffDate.getUTCMinutes() == 0) {
-    remainingTime = `${diffDate.getUTCSeconds().toString().padStart(2, "0")}`;
+    remainingTime = "<1min";
   }
 
   return {
