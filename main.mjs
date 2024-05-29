@@ -313,6 +313,11 @@ setInterval(() => {
  */
 
 /**
+ * @typedef {Object} GeneralOptions
+ * @property {string} remainingTimeClass The color of the remaining time.otherwise.
+ */
+
+/**
  * For a given ho-ur from the bus schedule, compute the remaining time until that hour and if it's for the next day.
  *
  * @param {string} hour The hour to compute.
@@ -404,8 +409,9 @@ const Settings = () => {
  * @param {Object} props The component props.
  * @param {ComputedHour[]} props.computedHours The computed hours list.
  * @returns {HTMLElement} The hours display component.
+ * @param {GeneralOptions} props.options The general options.
  */
-const HoursDisplay = ({ computedHours }) => {
+const HoursDisplay = ({ computedHours, options }) => {
   return div(
     {
       className: "hours-display-container",
@@ -422,9 +428,11 @@ const HoursDisplay = ({ computedHours }) => {
           computedHour.hour,
           sub(
             {
-              className:
-                "hour-remaning-time " +
-                (computedHour?.isNextDay ? "next-day" : ""),
+              className: [
+                "hour-remaning-time",
+                computedHour?.isNextDay ? "next-day" : "",
+                options?.remainingTimeClass ?? "",
+              ].join(" "),
             },
             ` (${computedHour?.remainingTime})`
           )
@@ -439,9 +447,10 @@ const HoursDisplay = ({ computedHours }) => {
  * @param {Object} props The component props.
  * @param {string} props.title The column title.
  * @param {ComputedHour[]} props.computedHours The computed hours list.
+ * @param {GeneralOptions} props.options The general options.
  * @returns {HTMLElement} The hours column display component.
  */
-const HoursColumnDisplay = ({ prefix, title, computedHours }) => {
+const HoursColumnDisplay = ({ prefix, title, computedHours, options }) => {
   return div(
     {
       className: "hours-display-column",
@@ -452,7 +461,7 @@ const HoursColumnDisplay = ({ prefix, title, computedHours }) => {
       },
       p({}, span({ className: "title-prefix" }, prefix), title)
     ),
-    HoursDisplay({ computedHours })
+    HoursDisplay({ computedHours, options })
   );
 };
 
@@ -499,11 +508,17 @@ const HoursSectionDisplay = () => {
       prefix: "Spre",
       title: "București",
       computedHours: turComputedHours,
+      options: {
+        remainingTimeClass: "column-1",
+      },
     }),
     HoursColumnDisplay({
       prefix: "Spre",
       title: "Vidra",
       computedHours: returComputedHours,
+      options: {
+        remainingTimeClass: "column-2",
+      },
     })
   );
 };

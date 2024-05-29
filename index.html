@@ -65,6 +65,8 @@
         --text-color: black;
         --text-secondary-color: #464646;
         --text-remaining-time-color: #d31717;
+        --text-remaining-time-color-1: #0B098A;
+        --text-remaining-time-color-2: #740490;
       }
 
       body {
@@ -187,6 +189,11 @@
         font-size: var(--header-font-size);
         font-weight: bold;
         border-bottom: 1px solid var(--text-color);
+
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        background-color: var(--secondary-color);
       }
 
       .hours-display-header p {
@@ -211,7 +218,15 @@
         color: var(--text-secondary-color);
       }
 
-      .next-day {
+      .hour-remaning-time.column-1 {
+        color: var(--text-remaining-time-color-1);
+      }
+
+      .hour-remaning-time.column-2 {
+        color: var(--text-remaining-time-color-2);
+      }
+
+      .hour-remaning-time.next-day {
         color: var(--text-remaining-time-color);
       }
 
@@ -298,6 +313,9 @@
       }
 
       .title-prefix {
+        position: sticky;
+        top: 0;
+        z-index: 999; /* Adjust z-index as needed */
         font-size: 1.5rem;
         font-weight: 500;
         margin-right: 3px;
