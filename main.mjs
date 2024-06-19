@@ -31,6 +31,15 @@ const nonFixedHolidays = [
   "06-24", // A doua zi de Rusalii
 ];
 
+const appSettings = {
+  style: {
+    secondaryColor: {
+      420: "#ffffff",
+      438: "#effbfa",
+    },
+  },
+};
+
 /**
  * The bus schedule data used to display the hours.
  */
@@ -288,6 +297,13 @@ van.derive(() => {
   localStorage.setItem("busOption", busOption.val);
   localStorage.setItem("displayNextDay", displayNextDay.val);
   localStorage.setItem("darkMode", darkMode.val);
+});
+
+van.derive(() => {
+  document.body.style.setProperty(
+    "--secondary-color",
+    appSettings.style.secondaryColor[busOption.val]
+  );
 });
 
 // Update the remaining time at a fixed interval.
