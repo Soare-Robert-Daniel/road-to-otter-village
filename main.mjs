@@ -34,8 +34,14 @@ const nonFixedHolidays = [
 const appSettings = {
   style: {
     secondaryColor: {
-      420: "#ffffff",
-      438: "#effbfa",
+      420: {
+        light: "oklch(1 0 0)",
+        dark: "oklch(0 0 0)",
+      },
+      438: {
+        light: "oklch(0.96 0.06 195.03)",
+        dark: "oklch(0.28 0.06 193.34)",
+      },
     },
   },
 };
@@ -302,7 +308,9 @@ van.derive(() => {
 van.derive(() => {
   document.body.style.setProperty(
     "--secondary-color",
-    appSettings.style.secondaryColor[busOption.val]
+    appSettings.style.secondaryColor[busOption.val][
+      darkMode.val ? "dark" : "light"
+    ]
   );
 });
 
