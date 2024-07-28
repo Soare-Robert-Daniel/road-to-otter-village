@@ -526,7 +526,9 @@ const HoursSectionDisplay = () => {
 
   return div(
     {
-      className: "hours-display-section",
+      className:
+        "hours-display-section" +
+        (isWeekendProgram(todayDate.val) ? " is-weekend" : ""),
     },
     HoursColumnDisplay({
       prefix: "Spre",
