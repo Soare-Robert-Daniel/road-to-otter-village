@@ -6,29 +6,29 @@ const { div, option, select, input, label, p, sub, span, button } = van.tags;
  * Romanian national holidays list.
  */
 const romanianNationalHolidays = [
-  "01-01", // Anul Nou
-  "01-02", // A doua zi de Anul Nou
-  "01-06", // Boboteaza
-  "01-07", // Sf. Ioan
-  "01-24", // Unirea Principatelor Române
-  "05-01", // Ziua Muncii
-  "06-01", // Ziua Copilului
-  "08-15", // Adormirea Maicii Domnului
-  "11-30", // Sf. Andrei
-  "12-01", // Ziua Națională a României
-  "12-25", // Crăciunul
-  "12-26", // A doua zi de Crăciun
+  { date: "01-01", name: "Anul Nou" },
+  { date: "01-02", name: "A doua zi de Anul Nou" },
+  { date: "01-06", name: "Boboteaza" },
+  { date: "01-07", name: "Sf. Ioan" },
+  { date: "01-24", name: "Unirea Principatelor Române" },
+  { date: "05-01", name: "Ziua Muncii" },
+  { date: "06-01", name: "Ziua Copilului" },
+  { date: "08-15", name: "Adormirea Maicii Domnului" },
+  { date: "11-30", name: "Sf. Andrei" },
+  { date: "12-01", name: "Ziua Națională a României" },
+  { date: "12-25", name: "Crăciunul" },
+  { date: "12-26", name: "A doua zi de Crăciun" },
 ];
 
 /**
  * Non-fixed holidays list. It must be updated every year.
  */
 const nonFixedHolidays = [
-  "04-14", // Vinerea Mare
-  "04-20", // Paștele
-  "04-21", // A doua zi de Paște
-  "06-08", // Rusaliile
-  "06-09", // A doua zi de Rusalii
+  { date: "04-14", name: "Vinerea Mare" },
+  { date: "04-20", name: "Paștele" },
+  { date: "04-21", name: "A doua zi de Paște" },
+  { date: "06-08", name: "Rusaliile" },
+  { date: "06-09", name: "A doua zi de Rusalii" },
 ];
 
 const appSettings = {
@@ -252,18 +252,29 @@ const busScheduleData = {
 const isHoliday = (date) => {
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
-
   const dateStr = `${month}-${day}`;
 
-  if (romanianNationalHolidays.includes(dateStr)) {
-    return true;
-  }
+  return (
+    romanianNationalHolidays.some((h) => h.date === dateStr) ||
+    nonFixedHolidays.some((h) => h.date === dateStr)
+  );
+};
 
-  if (nonFixedHolidays.includes(dateStr)) {
-    return true;
-  }
+/**
+ * Get the holiday name for a given date if it exists.
+ * @param {Date} date The date to check
+ * @returns {string|null} The holiday name or null if not a holiday
+ */
+const getHolidayName = (date) => {
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  const dateStr = `${month}-${day}`;
 
-  return false;
+  const holiday =
+    romanianNationalHolidays.find((h) => h.date === dateStr) ||
+    nonFixedHolidays.find((h) => h.date === dateStr);
+
+  return holiday ? holiday.name : null;
 };
 
 /**
@@ -556,13 +567,14 @@ const HoursSectionDisplay = () => {
  */
 const NoticeDisplay = () => {
   const isHolidayToday = isHoliday(todayDate.val);
+  const holidayName = isHolidayToday ? getHolidayName(todayDate.val) : null;
 
   return div(
     {
       className: "notice-display",
     },
     p(
-      () => (isHolidayToday ? "Astăzi este sărbătoare!" : ""),
+      () => (isHolidayToday ? `Astăzi este sărbătoare - ${holidayName}!` : ""),
       () =>
         showWeekendProgram.val || isHolidayToday
           ? p("Este afișat programul de weekend.")
