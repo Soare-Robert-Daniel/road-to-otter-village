@@ -24,11 +24,11 @@ const romanianNationalHolidays = [
  * Non-fixed holidays list. It must be updated every year.
  */
 const nonFixedHolidays = [
-  "05-03", // Vinerea Mare
-  "05-05", // Paștele
-  "05-06", // A doua zi de Paște
-  "06-23", // Rusaliile
-  "06-24", // A doua zi de Rusalii
+  "04-14", // Vinerea Mare
+  "04-20", // Paștele
+  "04-21", // A doua zi de Paște
+  "06-08", // Rusaliile
+  "06-09", // A doua zi de Rusalii
 ];
 
 const appSettings = {
