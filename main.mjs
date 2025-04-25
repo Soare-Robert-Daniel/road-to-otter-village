@@ -24,7 +24,7 @@ const romanianNationalHolidays = [
  * Non-fixed holidays list. It must be updated every year.
  */
 const nonFixedHolidays = [
-  { date: "04-14", name: "Vinerea Mare" },
+  { date: "04-18", name: "Vinerea Mare" },
   { date: "04-20", name: "Paștele" },
   { date: "04-21", name: "A doua zi de Paște" },
   { date: "06-08", name: "Rusaliile" },
