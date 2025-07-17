@@ -326,19 +326,19 @@ van.derive(() => {
 });
 
 // Update the remaining time at a fixed interval.
-// setInterval(() => {
-//   const currentDate = new Date();
+setInterval(() => {
+  const currentDate = new Date();
 
-//   // Skip if the hour and minute are the same
-//   if (
-//     currentDate.getHours() === todayDate.val.getHours() &&
-//     currentDate.getMinutes() === todayDate.val.getMinutes()
-//   ) {
-//     return;
-//   }
+  // Skip if the hour and minute are the same
+  if (
+    currentDate.getHours() === todayDate.val.getHours() &&
+    currentDate.getMinutes() === todayDate.val.getMinutes()
+  ) {
+    return;
+  }
 
-//   todayDate.val = new Date();
-// }, 450);
+  todayDate.val = new Date();
+}, 450);
 
 /**
  * @typedef {Object} ComputedHour
