@@ -8,7 +8,8 @@
     "cache-bust:dry": "bun run cache-bust.js --dry-run",
     "cache-bust:verbose": "bun run cache-bust.js --verbose",
     "build": "bun run cache-bust.js",
-    "dev": "bun run cache-bust.js --verbose"
+    "dev": "bun run cache-bust.js --verbose",
+    "format": "bunx biome format --write"
   },
   "keywords": ["bus", "schedule", "vidra", "ilfov"],
   "author": "Robert de la Vidra",

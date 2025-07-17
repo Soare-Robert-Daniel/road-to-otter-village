@@ -469,6 +469,10 @@ const HoursSectionDisplay = () => {
     );
   }
 
+  // Find first available hours (not next day)
+  const firstAvailableTur = turComputed.find((hour) => !hour.isNextDay);
+  const firstAvailableRetur = returComputed.find((hour) => !hour.isNextDay);
+
   // Create table rows - each row shows one tur and one retur hour
   const maxRows = Math.max(turComputed.length, returComputed.length);
   const rows = [];
@@ -477,8 +481,26 @@ const HoursSectionDisplay = () => {
     const turHour = turComputed[i];
     const returHour = returComputed[i];
 
+    // Check if this is the first available hour
+    const isTurFirstAvailable =
+      firstAvailableTur &&
+      turHour &&
+      turHour.hour === firstAvailableTur.hour &&
+      !turHour.isNextDay;
+    const isReturFirstAvailable =
+      firstAvailableRetur &&
+      returHour &&
+      returHour.hour === firstAvailableRetur.hour &&
+      !returHour.isNextDay;
+
     rows.push(
       tr(
+        {
+          className:
+            isTurFirstAvailable || isReturFirstAvailable
+              ? "first-available"
+              : "",
+        },
         // Tur (Spre București) columns
         turHour
           ? [

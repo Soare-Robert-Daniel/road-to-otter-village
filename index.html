@@ -47,15 +47,27 @@
 
     <style>
       :root {
-        --bg-color: #f0f0f0;
-        --text-color: #333;
-        --border-color: #999;
-        --header-bg: #e0e0e0;
-        --row-even: #f8f8f8;
-        --row-hover: #ffffcc;
-        --link-color: #0066cc;
-        --remaining-time-color: #666;
-        --next-day-color: #cc0000;
+        --bg-color: #ffffff;            /* alb pur pentru fundal */
+        --text-color: #000000;          /* negru pur pentru text */
+        --border-color: #cccccc;        /* gri mai deschis pentru margini */
+        --header-bg: #dddddd;           /* puțin mai închis decât bg-ul */
+        --row-even: #eef2f3;            /* alternare subtilă */
+        --row-hover: #fff7cc;           /* galben deschis pentru hover */
+        --link-color: #004080;          /* albastru mai închis */
+        --remaining-time-color: #000000;/* negru - mai vizibil */
+        --next-day-color: #b30000;      /* roșu închis pentru contrast puternic */
+      }
+
+      body.dark-mode {
+        --bg-color: #1a1a1a;
+        --text-color: #e0e0e0;
+        --border-color: #666;
+        --header-bg: #333;
+        --row-even: #404040;
+        --row-hover: #404040;
+        --link-color: #66ccff;
+        --remaining-time-color: #aaa;
+        --next-day-color: #ff6666;
       }
 
       body {
@@ -68,17 +80,7 @@
         line-height: 1.4;
       }
 
-      body.dark-mode {
-        --bg-color: #1a1a1a;
-        --text-color: #e0e0e0;
-        --border-color: #666;
-        --header-bg: #333;
-        --row-even: #2a2a2a;
-        --row-hover: #404040;
-        --link-color: #66ccff;
-        --remaining-time-color: #aaa;
-        --next-day-color: #ff6666;
-      }
+     
 
       .container {
         max-width: 900px;
@@ -346,6 +348,21 @@
       .next-day {
         color: var(--next-day-color);
         font-weight: bold;
+      }
+
+      .first-available {
+        background-color: #ffd700 !important;
+        animation: pulse 2s infinite;
+      }
+
+      body.dark-mode .first-available {
+        background-color: #b8860b !important;
+      }
+
+      @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
       }
 
       .notice {
