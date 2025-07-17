@@ -326,19 +326,19 @@ van.derive(() => {
 });
 
 // Update the remaining time at a fixed interval.
-setInterval(() => {
-  const currentDate = new Date();
+// setInterval(() => {
+//   const currentDate = new Date();
 
-  // Skip if the hour and minute are the same
-  if (
-    currentDate.getHours() === todayDate.val.getHours() &&
-    currentDate.getMinutes() === todayDate.val.getMinutes()
-  ) {
-    return;
-  }
+//   // Skip if the hour and minute are the same
+//   if (
+//     currentDate.getHours() === todayDate.val.getHours() &&
+//     currentDate.getMinutes() === todayDate.val.getMinutes()
+//   ) {
+//     return;
+//   }
 
-  todayDate.val = new Date();
-}, 450);
+//   todayDate.val = new Date();
+// }, 450);
 
 /**
  * @typedef {Object} ComputedHour
@@ -452,26 +452,31 @@ const HoursDisplay = ({ computedHours, options }) => {
       className: "hours-display-container",
     },
     computedHours.map((computedHour) => {
+      const subElem = span(
+        {
+          className: [
+            "hour-remaning-time",
+            computedHour?.isNextDay ? "next-day" : "",
+            options?.remainingTimeClass ?? "",
+          ].join(" "),
+        },
+        `${computedHour?.remainingTime}`
+      );
       return div(
         {
           className: "hour",
         },
-        p(
-          {
-            className: "hour-time",
-          },
-          computedHour.hour,
-          sub(
-            {
-              className: [
-                "hour-remaning-time",
-                computedHour?.isNextDay ? "next-day" : "",
-                options?.remainingTimeClass ?? "",
-              ].join(" "),
-            },
-            ` (${computedHour?.remainingTime})`
-          )
-        )
+        options.subPosition === "left"
+          ? [subElem, p({ className: "hour-time" }, computedHour.hour)]
+          : [
+              p(
+                {
+                  className: "hour-time",
+                },
+                computedHour.hour
+              ),
+              subElem,
+            ]
       );
     })
   );
@@ -547,6 +552,7 @@ const HoursSectionDisplay = () => {
       computedHours: turComputedHours,
       options: {
         remainingTimeClass: "column-1",
+        subPosition: "left",
       },
     }),
     HoursColumnDisplay({
