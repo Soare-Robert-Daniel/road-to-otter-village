@@ -85,7 +85,10 @@
         margin: 0 auto;
         background-color: white;
         border: 1px solid var(--border-color);
-        padding: 20px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
       }
 
       body.dark-mode .container {
@@ -99,8 +102,25 @@
         font-weight: bold;
       }
 
+      /* Initial state - compact mode by default */
       .controls {
-        margin-bottom: 25px;
+        display: none;
+      }
+
+      .compact-header {
+        display: block;
+      }
+
+      /* Show controls when explicitly enabled */
+      body.show-controls .controls {
+        display: block;
+      }
+
+      body.show-controls .compact-header {
+        display: none;
+      }
+
+      .controls {
         padding: 15px;
         background-color: var(--header-bg);
         border: 1px solid var(--border-color);
@@ -140,7 +160,6 @@
       }
 
       .compact-header {
-        margin-bottom: 25px;
         padding: 8px 12px;
         background-color: var(--header-bg);
         border: 1px solid var(--border-color);
@@ -156,7 +175,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 14px;
+        font-size: x-large;
         font-weight: bold;
       }
 
@@ -281,7 +300,6 @@
         width: 100%;
         border-collapse: collapse;
         border: 2px solid var(--border-color);
-        margin-bottom: 25px;
         font-size: 16px;
       }
 
@@ -291,15 +309,13 @@
         padding: 12px 8px;
         text-align: center;
         font-weight: bold;
-        font-size: 16px;
       }
 
       .schedule-table td {
         border: 1px solid var(--border-color);
         padding: 10px 12px;
         text-align: center;
-        font-family: "Courier New", monospace;
-        font-size: 18px;
+        font-family: monospace;
         font-weight: bold;
       }
 
@@ -313,8 +329,8 @@
 
       .time-cell {
         font-weight: bold;
-        font-size: 20px;
-        color: #000066;
+        font-size: xx-large;
+        color: black;
       }
 
       body.dark-mode .time-cell {
@@ -323,7 +339,7 @@
 
       .remaining-time {
         color: var(--remaining-time-color);
-        font-size: 14px;
+        font-size: xx-large;
         font-weight: normal;
       }
 
@@ -336,7 +352,6 @@
         background-color: #ffffcc;
         border: 2px solid #ffcc00;
         padding: 15px;
-        margin-bottom: 25px;
         text-align: center;
         font-size: 16px;
         font-weight: bold;
@@ -428,13 +443,9 @@
         }
         
         .container {
-          padding: 15px;
+          padding: 5px;
         }
-        
-        h1 {
-          font-size: 20px;
-        }
-        
+
         .controls-flex {
           gap: 15px;
         }
@@ -451,15 +462,6 @@
         
         .schedule-table td {
           padding: 8px 6px;
-          font-size: 16px;
-        }
-        
-        .time-cell {
-          font-size: 18px;
-        }
-        
-        .remaining-time {
-          font-size: 12px;
         }
         
         select {
@@ -498,7 +500,6 @@
         }
 
         .compact-info {
-          font-size: 12px;
           text-align: center;
         }
 
@@ -516,14 +517,6 @@
         .schedule-table th,
         .schedule-table td {
           padding: 6px 3px;
-        }
-        
-        .time-cell {
-          font-size: 16px;
-        }
-        
-        .remaining-time {
-          font-size: 11px;
         }
       }
     </style>
@@ -553,13 +546,10 @@
         </div>
       </div>
 
-      <div class="compact-header" id="compact-header" style="display: none;">
+      <div class="compact-header" id="compact-header">
         <div class="compact-flex">
           <div class="compact-info">
             <span id="compact-line">Linia 420</span>
-            <span class="separator">•</span>
-            <span id="compact-program">Zi de lucru</span>
-            <span id="compact-full-schedule" style="display: none;">• Program complet</span>
           </div>
           <div class="compact-controls">
             <button class="program-toggle" onclick="toggleProgramComplet()" id="compact-program-button">Program Complet</button>
@@ -578,7 +568,7 @@
     </div>
 
     <script>
-      let controlsVisible = false;
+      let controlsVisible = true;
 
       function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
@@ -614,15 +604,11 @@
 
       function toggleControls() {
         controlsVisible = !controlsVisible;
-        const controlsSection = document.getElementById('controls-section');
-        const compactHeader = document.getElementById('compact-header');
         
         if (controlsVisible) {
-          controlsSection.style.display = 'block';
-          compactHeader.style.display = 'none';
+          document.body.classList.add('show-controls');
         } else {
-          controlsSection.style.display = 'none';
-          compactHeader.style.display = 'block';
+          document.body.classList.remove('show-controls');
           updateCompactHeader();
         }
         
@@ -637,22 +623,6 @@
           compactLine.textContent = lineSelect.options[lineSelect.selectedIndex].text;
         }
 
-        // Update program display
-        const programSelect = document.querySelector('#settings select');
-        const compactProgram = document.getElementById('compact-program');
-        if (programSelect) {
-          compactProgram.textContent = programSelect.options[programSelect.selectedIndex].text;
-        }
-
-        // Update full schedule display in info section
-        const fullScheduleCheckbox = document.querySelector('#full-schedule input[type="checkbox"]');
-        const compactFullSchedule = document.getElementById('compact-full-schedule');
-        if (fullScheduleCheckbox && fullScheduleCheckbox.checked) {
-          compactFullSchedule.style.display = 'inline';
-        } else {
-          compactFullSchedule.style.display = 'none';
-        }
-
         // Update program button
         updateProgramButton();
       }
@@ -662,15 +632,16 @@
         document.body.classList.add('dark-mode');
       }
 
-      // Load controls visibility state
+      // Load controls visibility state (compact mode is default)
       const savedControlsVisible = localStorage.getItem('controlsVisible');
-      if (savedControlsVisible === 'false') {
-        // Start in compact mode
-        setTimeout(() => {
-          toggleControls();
-        }, 100);
-      } else {
+      if (savedControlsVisible === 'true') {
+        // Show full controls if explicitly saved as true
         controlsVisible = true;
+        document.body.classList.add('show-controls');
+      } else {
+        // Default to compact mode for new users or when explicitly false
+        controlsVisible = false;
+        // No need for setTimeout, CSS handles the initial state
       }
 
       // Listen for changes to update compact header

@@ -416,10 +416,7 @@ const Settings = () => {
       },
       "Zi de lucru"
     ),
-    option(
-      { value: "holiday", selected: showWeekendProgram.val },
-      "Weekend/Sărbătoare"
-    )
+    option({ value: "holiday", selected: showWeekendProgram.val }, "Weekend")
   );
 };
 
