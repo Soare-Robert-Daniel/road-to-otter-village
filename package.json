@@ -1,0 +1,16 @@
+{
+  "name": "road-to-otter-village",
+  "version": "1.0.0",
+  "description": "Bus schedule app for Vidra village",
+  "type": "module",
+  "scripts": {
+    "cache-bust": "bun run cache-bust.js",
+    "cache-bust:dry": "bun run cache-bust.js --dry-run",
+    "cache-bust:verbose": "bun run cache-bust.js --verbose",
+    "build": "bun run cache-bust.js",
+    "dev": "bun run cache-bust.js --verbose"
+  },
+  "keywords": ["bus", "schedule", "vidra", "ilfov"],
+  "author": "Robert de la Vidra",
+  "license": "MIT"
+}

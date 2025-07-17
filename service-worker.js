@@ -1,12 +1,5 @@
-const CACHE_NAME = "v1";
-const ASSETS_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/assets/favicon.ico",
-  "/van.min.js",
-  "/assets/font.ttf",
-  // Add other assets here
-];
+const CACHE_NAME = "v2";
+const ASSETS_TO_CACHE = ["/assets/favicon.ico", "/van.min.js", "/main.mjs"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
