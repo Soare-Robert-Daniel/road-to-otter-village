@@ -1,6 +1,20 @@
 // Read more about Van.js at https://vanjs.org
 import van from "./van.min.js";
-const { div, option, select, input, label, p, sub, span, button } = van.tags;
+const {
+  div,
+  option,
+  select,
+  input,
+  label,
+  p,
+  table,
+  thead,
+  tbody,
+  tr,
+  th,
+  td,
+  span,
+} = van.tags;
 
 /**
  * Romanian national holidays list.
@@ -316,15 +330,6 @@ van.derive(() => {
   localStorage.setItem("darkMode", darkMode.val);
 });
 
-van.derive(() => {
-  document.body.style.setProperty(
-    "--secondary-color",
-    appSettings.style.secondaryColor[busOption.val][
-      darkMode.val ? "dark" : "light"
-    ]
-  );
-});
-
 // Update the remaining time at a fixed interval.
 setInterval(() => {
   const currentDate = new Date();
@@ -398,171 +403,134 @@ const computeHour = (hour) => {
  * @returns {HTMLElement} The settings component.
  */
 const Settings = () => {
-  return div(
+  return select(
     {
-      className: "settings",
+      onchange: (e) => {
+        showWeekendProgram.val = e.target.value === "holiday";
+      },
     },
-    div(
-      select(
-        {
-          onchange: (e) => {
-            showWeekendProgram.val = e.target.value === "holiday";
-          },
-          className: "program-select",
-        },
-        option(
-          {
-            value: "work",
-            selected: !showWeekendProgram.val,
-          },
-          "🧰 Zi de lucru"
-        ),
-        option(
-          { value: "holiday", selected: showWeekendProgram.val },
-          "🎉 Weekend"
-        )
-      )
+    option(
+      {
+        value: "work",
+        selected: !showWeekendProgram.val,
+      },
+      "Zi de lucru"
     ),
-    div(
-      label(
-        input({
-          type: "checkbox",
-          onchange: (e) => {
-            displayNextDay.val = e.target.checked;
-          },
-          checked: displayNextDay.val,
-        }),
-        "Program Complet"
-      )
+    option(
+      { value: "holiday", selected: showWeekendProgram.val },
+      "Weekend/Sărbătoare"
     )
   );
 };
 
 /**
- * Render the hours display component.
+ * Render the full schedule checkbox component.
  *
- * @param {Object} props The component props.
- * @param {ComputedHour[]} props.computedHours The computed hours list.
- * @returns {HTMLElement} The hours display component.
- * @param {GeneralOptions} props.options The general options.
+ * @returns {HTMLElement} The full schedule component.
  */
-const HoursDisplay = ({ computedHours, options }) => {
-  return div(
-    {
-      className: "hours-display-container",
-    },
-    computedHours.map((computedHour) => {
-      const subElem = span(
-        {
-          className: [
-            "hour-remaning-time",
-            computedHour?.isNextDay ? "next-day" : "",
-            options?.remainingTimeClass ?? "",
-          ].join(" "),
-        },
-        `${computedHour?.remainingTime}`
-      );
-      return div(
-        {
-          className: "hour",
-        },
-        options.subPosition === "left"
-          ? [subElem, p({ className: "hour-time" }, computedHour.hour)]
-          : [
-              p(
-                {
-                  className: "hour-time",
-                },
-                computedHour.hour
-              ),
-              subElem,
-            ]
-      );
-    })
-  );
-};
-
-/**
- * Render the hours column display component.
- * @param {Object} props The component props.
- * @param {string} props.title The column title.
- * @param {ComputedHour[]} props.computedHours The computed hours list.
- * @param {GeneralOptions} props.options The general options.
- * @returns {HTMLElement} The hours column display component.
- */
-const HoursColumnDisplay = ({ prefix, title, computedHours, options }) => {
-  return div(
-    {
-      className: "hours-display-column",
-    },
-    div(
-      {
-        className: "hours-display-header",
+const FullScheduleToggle = () => {
+  return label(
+    input({
+      type: "checkbox",
+      onchange: (e) => {
+        displayNextDay.val = e.target.checked;
       },
-      p({}, span({ className: "title-prefix" }, prefix), title)
-    ),
-    HoursDisplay({ computedHours, options })
+      checked: displayNextDay.val,
+    }),
+    " Program Complet"
   );
 };
 
 /**
- * Render the hours section display component.
+ * Render the hours section display component as a table.
  * @returns {HTMLElement} The hours section display component.
  */
 const HoursSectionDisplay = () => {
-  const turComputedHours = (
-    showWeekendProgram.val
-      ? busScheduleData.bus[busOption.val].tur.weekendHours
-      : busScheduleData.bus[busOption.val].tur.workingHours
-  )
+  const turHours = showWeekendProgram.val
+    ? busScheduleData.bus[busOption.val].tur.weekendHours
+    : busScheduleData.bus[busOption.val].tur.workingHours;
+
+  const returHours = showWeekendProgram.val
+    ? busScheduleData.bus[busOption.val].retur.weekendHours
+    : busScheduleData.bus[busOption.val].retur.workingHours;
+
+  // Filter and compute hours
+  const turComputed = turHours
     .map(computeHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
 
-  const returComputedHours = (
-    showWeekendProgram.val
-      ? busScheduleData.bus[busOption.val].retur.weekendHours
-      : busScheduleData.bus[busOption.val].retur.workingHours
-  )
+  const returComputed = returHours
     .map(computeHour)
     .filter((computedHour) => !computedHour.isNextDay || displayNextDay.val);
 
-  if (turComputedHours.length === 0 && returComputedHours.length === 0) {
+  if (turComputed.length === 0 && returComputed.length === 0) {
     return div(
       {
-        className: "hours-display-section",
+        className: "no-schedule",
       },
-      p(
-        {
-          className: "no-hours",
-        },
-        "Numai sunt curse disponibile pentru ziua de azi."
+      "Nu sunt curse disponibile pentru ziua de azi."
+    );
+  }
+
+  // Create table rows - each row shows one tur and one retur hour
+  const maxRows = Math.max(turComputed.length, returComputed.length);
+  const rows = [];
+
+  for (let i = 0; i < maxRows; i++) {
+    const turHour = turComputed[i];
+    const returHour = returComputed[i];
+
+    rows.push(
+      tr(
+        // Tur (Spre București) columns
+        turHour
+          ? [
+              td({ className: "time-cell" }, turHour.hour),
+              td(
+                span(
+                  {
+                    className: `remaining-time ${
+                      turHour.isNextDay ? "next-day" : ""
+                    }`,
+                  },
+                  turHour.remainingTime
+                )
+              ),
+            ]
+          : [td("--"), td("--")],
+
+        // Retur (Spre Vidra) columns
+        returHour
+          ? [
+              td({ className: "time-cell" }, returHour.hour),
+              td(
+                span(
+                  {
+                    className: `remaining-time ${
+                      returHour.isNextDay ? "next-day" : ""
+                    }`,
+                  },
+                  returHour.remainingTime
+                )
+              ),
+            ]
+          : [td("--"), td("--")]
       )
     );
   }
 
-  return div(
+  return table(
     {
-      className:
-        "hours-display-section" +
-        (isWeekendProgram(todayDate.val) ? " is-weekend" : ""),
+      className: "schedule-table",
     },
-    HoursColumnDisplay({
-      prefix: "Spre",
-      title: "București",
-      computedHours: turComputedHours,
-      options: {
-        remainingTimeClass: "column-1",
-        subPosition: "left",
-      },
-    }),
-    HoursColumnDisplay({
-      prefix: "Spre",
-      title: "Vidra",
-      computedHours: returComputedHours,
-      options: {
-        remainingTimeClass: "column-2",
-      },
-    })
+    thead(
+      tr(
+        th({ colspan: 2 }, "Spre București"),
+        th({ colspan: 2 }, "Spre Vidra")
+      ),
+      tr(th("Ora"), th("Rămas"), th("Ora"), th("Rămas"))
+    ),
+    tbody(...rows)
   );
 };
 
@@ -575,34 +543,18 @@ const NoticeDisplay = () => {
   const isHolidayToday = isHoliday(todayDate.val);
   const holidayName = isHolidayToday ? getHolidayName(todayDate.val) : null;
 
-  return div(
-    {
-      className: "notice-display",
-    },
-    p(
-      () => (isHolidayToday ? `Astăzi este sărbătoare - ${holidayName}!` : ""),
-      () =>
-        showWeekendProgram.val || isHolidayToday
-          ? p("Este afișat programul de weekend.")
-          : ""
-    )
-  );
-};
+  if (!isHolidayToday && !showWeekendProgram.val) {
+    return div();
+  }
 
-const DarkModeToggle = () => {
   return div(
     {
-      className: "dark-mode-toggle",
+      className: "notice",
     },
-    button(
-      {
-        onclick: () => {
-          document.body.classList.toggle("dark-mode");
-          darkMode.val = !darkMode.val;
-        },
-      },
-      darkMode.val ? "🌞" : "🌙"
-    )
+    isHolidayToday ? `Astăzi este sărbătoare - ${holidayName}!` : "",
+    showWeekendProgram.val || isHolidayToday
+      ? " Este afișat programul de weekend."
+      : ""
   );
 };
 
@@ -612,47 +564,31 @@ const DarkModeToggle = () => {
  * @returns {HTMLElement} The line display component.
  */
 const LineDisplay = () => {
-  return div(
-    select(
-      {
-        onchange: (e) => (busOption.val = e.target.value),
-        value: busOption.val,
-      },
-      option({ value: "420", selected: "420" === busOption.val }, "Linia🌿420"),
-      option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
-    ),
-    DarkModeToggle
+  return select(
+    {
+      onchange: (e) => (busOption.val = e.target.value),
+      value: busOption.val,
+    },
+    option({ value: "420", selected: "420" === busOption.val }, "Linia 420"),
+    option({ value: "438", selected: "438" === busOption.val }, "Linia 438")
   );
 };
 
 // Add the components to the DOM to be rendered.
 van.add(document.querySelector("#line"), LineDisplay);
 van.add(document.querySelector("#settings"), Settings);
+van.add(document.querySelector("#full-schedule"), FullScheduleToggle);
 van.add(document.querySelector("#app"), HoursSectionDisplay);
 van.add(document.querySelector("#notice"), NoticeDisplay);
 
 /**
- * Have the Manual opened until the user closes it via the acknowledge button.
+ * Initialize the application
  */
 window.onload = () => {
   // Apply the dark mode if it was saved.
   if (savedDarkMode) {
     document.body.classList.add("dark-mode");
   }
-
-  const firstTimeInstructions = localStorage.getItem("firstTimeInstructions");
-
-  const manual = document.querySelector("#manual");
-
-  if (Boolean(firstTimeInstructions)) {
-    return;
-  }
-
-  manual?.setAttribute("open", "true");
-  manual?.querySelector(".btn.close")?.addEventListener("click", () => {
-    localStorage.setItem("firstTimeInstructions", "true");
-    manual?.removeAttribute("open");
-  });
 };
 
 if ("serviceWorker" in navigator) {
