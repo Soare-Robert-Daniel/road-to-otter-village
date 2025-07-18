@@ -54,7 +54,7 @@
         --row-even: #eef2f3;            /* alternare subtilă */
         --row-hover: #fff7cc;           /* galben deschis pentru hover */
         --link-color: #004080;          /* albastru mai închis */
-        --remaining-time-color: #000000;/* negru - mai vizibil */
+        --remaining-time-color: #20197a;/* negru - mai vizibil */
         --next-day-color: #b30000;      /* roșu închis pentru contrast puternic */
       }
 
@@ -162,7 +162,7 @@
       }
 
       .compact-header {
-        padding: 8px 12px;
+        padding: 4px 6px;
         background-color: var(--header-bg);
         border: 1px solid var(--border-color);
       }
@@ -171,6 +171,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-direction: row;
       }
 
       .compact-info {
@@ -310,7 +311,6 @@
         border: 1px solid var(--border-color);
         padding: 12px 8px;
         text-align: center;
-        font-weight: bold;
       }
 
       .schedule-table td {
@@ -327,6 +327,10 @@
 
       .schedule-table tr:hover {
         background-color: var(--row-hover);
+      }
+
+      .schedule-table thead th {
+        font-weight: 200;
       }
 
       .time-cell {
@@ -474,7 +478,7 @@
         
         .schedule-table th {
           padding: 8px 4px;
-          font-size: 14px;
+          font-size: larger;
         }
         
         .schedule-table td {
@@ -511,7 +515,7 @@
         }
 
         .compact-flex {
-          flex-direction: column;
+          flex-direction: row;
           gap: 6px;
           align-items: center;
         }
